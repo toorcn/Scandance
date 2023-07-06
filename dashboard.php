@@ -51,19 +51,63 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $qrIdentifier = $event_organizerID . ":" . $event_name . ":" . $event_code;
                 $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$qrIdentifier";                
+                
+                $event_id = getEventIdByEventCode($event_code)["Event_ID"];
                 ?>
-                <h2><?php echo $event_name ?></h2>
-                <img src='<?php echo $qrCodeUrl ?>' alt='QR Code'>
-                <p>Event Code: <?php echo $event_code ?></p>
-                (<span id="cntdwn"></span>)
-                <script language="JavaScript">
-                    TargetDate = "<?php echo $endTimeCountdown ?>";
-                    CountActive = true;
-                    CountStepper = -1;
-                    LeadingZero = true;
-                    DisplayFormat = "%%M%% Minutes, %%S%% Seconds.";
-                </script>
+                <div class="row">
+                    <div class="col">
+                        <h2><?php echo $event_name ?></h2>
+                        <img src='<?php echo $qrCodeUrl ?>' alt='QR Code'>
+                        <p>Event Code: <?php echo $event_code ?></p>
+                        (<span id="cntdwn"></span>)
+                        <script language="JavaScript">
+                            TargetDate = "<?php echo $endTimeCountdown ?>";
+                            CountActive = true;
+                            CountStepper = -1;
+                            LeadingZero = true;
+                            DisplayFormat = "%%M%% Minutes, %%S%% Seconds.";
+                        </script>
+                    </div>
+                    <div class="col">
+                        <div style="width:100%; height:100%;">
+                            <h4>Live Attendance (<span id="attendanceCount">0</span>)</h4>
+                            <div id="liveAttendance" style="border: 1px solid black; width:100%; height:100%;"></div>
+                        </div>
+                        <script language="JavaScript">
+                            function updateLiveAttendance() {
+                                $.ajax({
+                                    type: "POST",
+                                    url: 'updateParticipantList.php',
+                                    dataType: 'json',
+                                    data: {functionname: 'getParticipantByEventID', arguments: [<?php echo $event_id ?>]},
+
+                                    success: function (obj, textstatus) {
+                                        if( !('error' in obj) ) {
+                                            if (obj.result != null) {
+                                            let participantJSON = JSON.parse(obj.result);
+                                                html = "";
+                                                for(let i = 0; i < participantJSON.length; i++) {
+                                                    for (var key in participantJSON[i]) {
+                                                        html += "<p> User ID: " + participantJSON[i][key] + " - Scan time: " +  key + "</p>";
+                                                    }
+                                                } 
+                                                document.getElementById("liveAttendance").innerHTML = html;
+                                                document.getElementById("attendanceCount").innerHTML = participantJSON.length;
+                                            }
+                                        }else {
+                                            console.log(obj.error);
+                                        }
+                                    }
+                                });
+                                setTimeout(updateLiveAttendance, 1000);
+                            }
+                            updateLiveAttendance();
+                        </script>
+                    </div>
+                </div>
+
                 <?php
+                
             } else {
                 // newEvent Error
             }
@@ -92,6 +136,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 </div>
             </div>
+            
             <script>
                 let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
                 scanner.addListener('scan', function (content) {
@@ -101,10 +146,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     let email = "<?php echo $email ?>";
                     let role = "<?php echo $role ?>";
                     let eventCode = content;
-                    // $.post("scansuccess.php", {email: email, role: role, eventCode: eventCode}, function(data) {
-                    //     // console.log(data);
-                    //     // $("#video-card").html(data);
-                    // });
                     window.location.href = "scansuccess.php?email=" + email + "&role=" + role + "&eventCode=" + eventCode;
                     console.log(content);
                 });
@@ -128,6 +169,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     console.error(e);
                 });
             </script>
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body" id="video-card">
+                    <h5 class="card-title">User information</h5>
+                    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                        <label for="userName">Name: </label>
+                        <input type="text" name="userName" id="userName" required>
+                        <br>
+                        <label for="userPhone">Phone: </label>
+                        <input type="tel" name="userPhone" id="userPhone" required>
+
+                        <input type="submit" value="Join">
+                        <!-- Hidden -->
+                        <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
+                        <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>
+                    </form>
+
+                </div>
+            </div>
+
             <?php     
         } else {
             // Participant form submitted

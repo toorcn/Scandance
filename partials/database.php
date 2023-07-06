@@ -85,18 +85,13 @@
     }
     function getParticipantByEventID($eventID) {
         global $conn;
-        // SELECT name, latitude, longitude,
-        //     JSON_VALUE(attr, '$.details.foodType') AS food_type
-        // FROM locations
-        // WHERE type = 'R';
         $result = $conn->query("SELECT Event_participants FROM eventparticipants WHERE Event_ID = '$eventID'");
         if($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
+            $row = $result->fetch_assoc()["Event_participants"];
             return $row;
         }
         else return false;
     }
-
     function getEventIdByEventCode($eventCode) {
         global $conn;
         $result = $conn->query("SELECT Event_ID FROM events WHERE Event_Code = '$eventCode'");
@@ -105,14 +100,15 @@
             return $row;
         }
         else return false;
-    }
-    function getParti($eventid) {
-        global $conn;
-        $result = $conn->query("SELECT Event_participants FROM events WHERE Event_ID = '$eventid'");
-        if($result->num_rows > 0) { 
-            $row = $result->fetch_assoc();
-            return $row;
+    } 
+    function hasJoinedEvent($participantID, $eventID) {
+        $row = (array)getParticipantByEventID($eventID);
+        $row = json_decode($row[0], true);
+        foreach($row as $key => $value) {
+            foreach($value as $key2 => $value2) {
+                if($value2 == $participantID) return true;
+            }
         }
-        else return false;
+        return false;
     }
 ?>
