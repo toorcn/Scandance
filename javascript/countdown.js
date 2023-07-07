@@ -28,9 +28,11 @@ function calcage(secs, num1, num2) {
 
 function CountBack(secs) {
     if (secs < 0) {
+        const countdown = document.getElementById("cntdwn");
         // End of timer
         // history.back();
-        document.getElementById("cntdwn").innerHTML = FinishMessage;
+        // window.location.href = "clearQRSession.php";
+        countdown.innerHTML = FinishMessage;
         return;
     }
     DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs, 86400, 100000));

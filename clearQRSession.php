@@ -7,5 +7,5 @@
    unset($_SESSION['event_code']);
    
    echo 'You have cleaned session';
-   header('Refresh: 1; URL = dashboard.php');
+   header('Refresh: 0; URL = dashboard.php');
 ?>

@@ -112,8 +112,26 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
                         CountStepper = -1;
                         LeadingZero = true;
                         DisplayFormat = "%%M%% Minutes, %%S%% Seconds.";
+                        FinishMessage = "Event Expired";
                     </script>
                 </div>
+                <script>
+                    var activateOnceFlag = false;
+                    function checkCountdownEnd() {
+                        const countdown = document.getElementById("cntdwn");
+                        console.log(countdown.innerHTML);
+                        if (countdown.innerHTML == "Event Expired" && activateOnceFlag == false) {
+                            activateOnceFlag = true;
+                            window.location.href = "clearQRSession.php";
+                            // console.log(countdown.innerHTML);
+                            // alert('TIMES UP!');
+                        } else {
+                            activateOnceFlag = false;
+                        }  
+                        setTimeout(checkCountdownEnd, 5000);
+                    }
+                    checkCountdownEnd();
+                </script>
                 <div class="col">
                     <div style="width:100%; height:100%;">
                         <h4>Live Attendance (<span id="attendanceCount">0</span>)</h4>
