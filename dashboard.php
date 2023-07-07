@@ -44,23 +44,25 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
                 <?php                 
             }
         } else { 
-            $event_name = $_POST['event_name'];
-            $event_duration = $_POST['event_duration'];
-            $event_organizerID = getIdByEmail($email, $role);
-            $event_code = (string)bin2hex(random_bytes(4));
-            $event_code = strtoupper(substr($event_code, 0, 6));
+            if (!isset($_SESSION['event_code'])) {
+                $event_name = $_POST['event_name'];
+                $event_duration = $_POST['event_duration'];
+                $event_organizerID = getIdByEmail($email, $role);
+                $event_code = (string)bin2hex(random_bytes(4));
+                $event_code = strtoupper(substr($event_code, 0, 6));
 
-            $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Singapore')); 
-            $endTime = $currentDateTime->add(new DateInterval('PT' . $event_duration . 'M'));
-            $endTimeSQL = $endTime->format('Y-m-d H:i:s');
-            // echo "editted SQL time: " . $endTimeSQL . "<br>";
-            // echo "<br>ID" . getIdByEmail($email, $role);
-            $_SESSION['event_name'] = $event_name;
-            $_SESSION['endTime'] = $endTime;
-            $_SESSION['endTimeSQL'] = $endTimeSQL;
-            $_SESSION['event_organizerID'] = $event_organizerID;
-            $_SESSION['event_code'] = $event_code;                
-            newEvent($event_organizerID, $event_name, $endTimeSQL, $event_code);
+                $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Singapore')); 
+                $endTime = $currentDateTime->add(new DateInterval('PT' . $event_duration . 'M'));
+                $endTimeSQL = $endTime->format('Y-m-d H:i:s');
+                // echo "editted SQL time: " . $endTimeSQL . "<br>";
+                // echo "<br>ID" . getIdByEmail($email, $role);
+                $_SESSION['event_name'] = $event_name;
+                $_SESSION['endTime'] = $endTime;
+                $_SESSION['endTimeSQL'] = $endTimeSQL;
+                $_SESSION['event_organizerID'] = $event_organizerID;
+                $_SESSION['event_code'] = $event_code;                
+                newEvent($event_organizerID, $event_name, $endTimeSQL, $event_code);
+            }
         }
             // if (!(isset($_SESSION['event_name']) && isset($_SESSION['endTime']) && isset($_SESSION['endTimeSQL']) && isset($_SESSION['event_organizerID']) && isset($_SESSION['event_code']))) {
                 // // Event form submitted
