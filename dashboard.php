@@ -173,6 +173,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="card" style="width: 18rem;">
                 <div class="card-body" id="video-card">
                     <h5 class="card-title">User information</h5>
+                    <!-- getParticipantInformation(); -->
                     <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
                         <label for="userName">Name: </label>
                         <input type="text" name="userName" id="userName" required>
@@ -185,6 +186,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
                         <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>
                     </form>
+                    <?php
+                    if (isset($_POST['userName']) && isset($_POST['userPhone'])) {
+                        $userName = $_POST['userName'];
+                        $userPhone = $_POST['userPhone'];
+                        $userID = getIdByEmail($email, $role);
+                        if (updateParticipantInformation($userID, "name", $userName) &&
+                            updateParticipantInformation($userID, "phone", $userPhone)) {
+                            echo "<p>Info updated</p>";
+                        } else {
+                            echo "<p>Error updating info</p>";
+                        }
+                    }
+                    ?>
 
                 </div>
             </div>

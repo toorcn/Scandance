@@ -111,4 +111,26 @@
         }
         return false;
     }
+    function getParticipantInformation($participantID) {
+        global $conn;
+        $result = $conn->query("SELECT * FROM userparticipant WHERE Participant_ID = '$participantID'");
+        if($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row;
+        }
+        else return false;
+    }
+    function updateParticipantInformation($participantID, $varKey, $varValue) {
+        global $conn;
+        $sql = "UPDATE `userparticipant`
+                SET `Participant_information` = IF(`Participant_information` IS NULL,
+                        JSON_ARRAY(), `Participant_information`),
+                    `Participant_information` = JSON_ARRAY_APPEND(
+                        `Participant_information`, '$', JSON_OBJECT('$varKey', '$varValue'))
+                WHERE `Participant_ID` = $participantID;";
+                
+        $result = $conn->query($sql);
+        if ($result === TRUE) return true;
+        else return false;
+    }
 ?>
