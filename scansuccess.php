@@ -2,9 +2,9 @@
 <?php require('partials/header.php') ?>
 
 <?php
-if(isset($_GET['email']) && isset($_GET['role']) && isset($_GET['eventCode'])) { 
-    $email = $_GET['email'];
-    $role = $_GET['role'];
+if(isset($_GET['eventCode'])) { 
+    $email = $_SESSION['email'];
+    $role = $_SESSION['role'];
     $event_code = $_GET['eventCode'];
     // parse event_code
     $code_explode = explode(":", $event_code);

@@ -1,5 +1,7 @@
-<?php require('partials/database.php') ?>
-<?php require('partials/header.php') ?>
+<?php 
+require('partials/database.php');
+require('partials/header.php');
+?>
 
 <h1>Register</h1>
 
@@ -31,6 +33,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (userRegister($role, $email, $password)) {
             echo "<p>Thank you for registering as an $role!</p>";
             // header("Location: login.php");
+            header('Refresh: 1; URL = login.php');
         } else {
             echo "Error...";
         }

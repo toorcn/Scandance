@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +29,7 @@
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <!-- NAV -->
                     <li><a href="./" class="nav-link px-2 text-secondary">Home</a></li>
+                    <li><a href="./dashboard.php" class="nav-link px-2 text-secondary">Dashboard</a></li>
                     <!-- <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
@@ -34,8 +37,18 @@
                 </ul>
 
                 <div class="text-end">
-                    <a href="register.php" class="btn btn-outline-light me-2">Sign-up</a>
-                    <a href="login.php" class="btn btn-warning">Login</a>
+                    <?php 
+                    if(!(isset($_SESSION['valid']) && $_SESSION['valid'] == true)) {
+                        ?>
+                        <a href="register.php" class="btn btn-outline-light me-2">Sign-up</a>
+                        <a href="login.php" class="btn btn-warning">Login</a>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="logout.php" class="btn btn-outline-light me-2">Logout</a>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>

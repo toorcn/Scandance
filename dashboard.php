@@ -4,9 +4,11 @@
 <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 <!--  -->
 <?php
-if($_SERVER['REQUEST_METHOD'] === 'POST') { 
-    $email = $_POST['email'];
-    $role = $_POST['role'];
+if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
+    $email = $_SESSION['email'];
+    $role = $_SESSION['role'];
+    $participantID = getIdByEmail($email, $role);
+    $participant = new participant($participantID);
 
     if($role == "Organizer") {
         if(!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
@@ -75,26 +77,37 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <script language="JavaScript">
                             function updateLiveAttendance() {
+                                // const thisPath = String(window.location.href).substr(7, 23);
+                                // console.log(thisPath + '/API/updateParticipantList.php')
+                                console.log('ULA');
                                 $.ajax({
                                     type: "POST",
-                                    url: 'updateParticipantList.php',
+                                    url: 'postGetEventArrays.php',
                                     dataType: 'json',
                                     data: {functionname: 'getParticipantByEventID', arguments: [<?php echo $event_id ?>]},
+                                    
+                                    success: (obj, textstatus) => {
+                                        // console.log({obj});
+                                        // const t = obj.result;
+                                        // console.log({t});
 
-                                    success: function (obj, textstatus) {
+                                        // 
                                         if( !('error' in obj) ) {
                                             if (obj.result != null) {
-                                            let participantJSON = JSON.parse(obj.result);
+                                                let objResult = obj.result;
                                                 html = "";
-                                                for(let i = 0; i < participantJSON.length; i++) {
-                                                    for (var key in participantJSON[i]) {
-                                                        html += "<p> User ID: " + participantJSON[i][key] + " - Scan time: " +  key + "</p>";
-                                                    }
+
+                                                for(let i = 0; i < objResult.idArray.length; i++) {
+                                                    const participantId = objResult.idArray[i];
+                                                    const timestamp = objResult.timestampArray[i];
+                                                    const name = objResult.nameArray[i];
+                                                    const phone = objResult.phoneArray[i];
+                                                    html += "<p>(" + participantId + ") " + name + "[" + phone + "]- Scan time: " +  timestamp + "</p>";
                                                 } 
                                                 document.getElementById("liveAttendance").innerHTML = html;
-                                                document.getElementById("attendanceCount").innerHTML = participantJSON.length;
+                                                document.getElementById("attendanceCount").innerHTML = objResult.idArray.length;
                                             }
-                                        }else {
+                                        } else {
                                             console.log(obj.error);
                                         }
                                     }
@@ -116,16 +129,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if($role == "Participant") {
         if(!isset($_POST['eventCode'])) {
             ?>
-            <!-- <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-                <label for="eventID">Event ID: </label>
-                <input type="text" name="eventID" id="eventID" value="1">
-                <label for="eventCode">Event Code: </label>
-                <input type="text" name="eventCode" id="eventCode" value="ABC123">
-                <input type="submit" value="Join"> -->
-                <!-- Hidden -->
-                <!-- <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
-                <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>
-            </form>    -->
             <!-- <h3>Scan QR Code</h3> -->
             
             <div class="card" style="width: 18rem;">
@@ -137,68 +140,39 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
             
-            <script>
-                let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
-                scanner.addListener('scan', function (content) {
-                    // QR Code scanned
-                    // post to scansucess.php
-                    // console.log(content);
-                    let email = "<?php echo $email ?>";
-                    let role = "<?php echo $role ?>";
-                    let eventCode = content;
-                    window.location.href = "scansuccess.php?email=" + email + "&role=" + role + "&eventCode=" + eventCode;
-                    console.log(content);
-                });
-                Instascan.Camera.getCameras().then(function (cameras) {
-                    if (cameras.length > 0) {
-                        for (let i = 0; i < cameras.length; i++) {
-                            document.getElementById("video-card").innerHTML += 
-                            "<a href='#' class='camera-switches btn btn-primary p-1 m-1' data-cam='"+i+"'>Camera " + (i+1) + "</a>";
-                        }
-                        // when clicked start scanner of that camera
-                        $(".camera-switches").click(function() {
-                            let cam = $(this).attr("data-cam");
-                            scanner.start(cameras[cam]);
-                            $("#video-text").html("<p class='card-text'>Camera " + (parseInt(cam)+1) + "</p>");
-                        });
-                        // scanner.start(cameras[1]);
-                    } else {
-                        console.error('No cameras found.');
-                    }
-                }).catch(function (e) {
-                    console.error(e);
-                });
-            </script>
+            <script src="./javascript/qrscanner.js"></script>
 
             <div class="card" style="width: 18rem;">
                 <div class="card-body" id="video-card">
                     <h5 class="card-title">User information</h5>
-                    <!-- getParticipantInformation(); -->
-                    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-                        <label for="userName">Name: </label>
-                        <input type="text" name="userName" id="userName" required>
-                        <br>
-                        <label for="userPhone">Phone: </label>
-                        <input type="tel" name="userPhone" id="userPhone" required>
-
-                        <input type="submit" value="Join">
-                        <!-- Hidden -->
-                        <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
-                        <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>
-                    </form>
                     <?php
                     if (isset($_POST['userName']) && isset($_POST['userPhone'])) {
                         $userName = $_POST['userName'];
                         $userPhone = $_POST['userPhone'];
-                        $userID = getIdByEmail($email, $role);
-                        if (updateParticipantInformation($userID, "name", $userName) &&
-                            updateParticipantInformation($userID, "phone", $userPhone)) {
+
+                        if($participant->updateName($userName) &&
+                            $participant->updatePhone($userPhone)) {
                             echo "<p>Info updated</p>";
                         } else {
                             echo "<p>Error updating info</p>";
                         }
                     }
                     ?>
+                    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                        <label for="userName">Name: </label>
+                        <input type="text" name="userName" id="userName" 
+                            value="<?php 
+                                if ($participant->getName()) echo $participant->getName();
+                                ?>">
+                        <br>
+                        <label for="userPhone">Phone: </label>
+                        <input type="tel" name="userPhone" id="userPhone" 
+                            value="<?php 
+                                if ($participant->getPhone()) echo $participant->getPhone() 
+                                ?>">
+
+                        <input type="submit" value="Join">
+                    </form>
 
                 </div>
             </div>
@@ -208,9 +182,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Participant form submitted
             $event_code = $_POST['eventCode'];
             $eventID = $_POST['eventID'];
-            $email = $_POST['email'];
-            $role = $_POST['role'];
-            $participantID = getIdByEmail($email, $role);
             if(participantJoinEvent($participantID, $eventID)) {
                 echo "<span>$event_code</span>";
                 echo "<p>Thank you for joining the event!</p>";

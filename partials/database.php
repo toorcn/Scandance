@@ -103,6 +103,8 @@
     } 
     function hasJoinedEvent($participantID, $eventID) {
         $row = (array)getParticipantByEventID($eventID);
+        // echo print_r($row);
+        if ($row == null) return false;
         $row = json_decode($row[0], true);
         foreach($row as $key => $value) {
             foreach($value as $key2 => $value2) {
@@ -120,17 +122,83 @@
         }
         else return false;
     }
-    function updateParticipantInformation($participantID, $varKey, $varValue) {
-        global $conn;
-        $sql = "UPDATE `userparticipant`
-                SET `Participant_information` = IF(`Participant_information` IS NULL,
-                        JSON_ARRAY(), `Participant_information`),
-                    `Participant_information` = JSON_ARRAY_APPEND(
-                        `Participant_information`, '$', JSON_OBJECT('$varKey', '$varValue'))
-                WHERE `Participant_ID` = $participantID;";
+    // function updateParticipantInformation($participantID, $varKey, $varValue) {
+    //     global $conn;
+    //     $sql = "UPDATE `userparticipant`
+    //             SET `Participant_information` = IF(`Participant_information` IS NULL,
+    //                     JSON_ARRAY(), `Participant_information`),
+    //                 `Participant_information` = JSON_ARRAY_APPEND(
+    //                     `Participant_information`, '$', JSON_OBJECT('$varKey', '$varValue'))
+    //             WHERE `Participant_ID` = $participantID;";
                 
-        $result = $conn->query($sql);
-        if ($result === TRUE) return true;
-        else return false;
+    //     $result = $conn->query($sql);
+    //     if ($result === TRUE) return true;
+    //     else return false;
+    // }
+    class Participant {
+        private $participantID;
+        public function __construct($participantID) {
+            $this->participantID = $participantID;
+        }
+        public function getName() {
+            $row = getParticipantInformation($this->participantID);
+            return $row["Participant_Name"];
+        }
+        public function getPhone() {
+            $row = getParticipantInformation($this->participantID);
+            return $row["Participant_Phone"];
+        }
+        public function updateName($name) {
+            global $conn;
+            $result = $conn->query("UPDATE userparticipant SET Participant_Name = '$name' WHERE Participant_ID = $this->participantID");
+            return $result;
+            // if ($result === TRUE) return true;
+            // else return false;
+            // return updateParticipantInformation($this->participantID, "Name", $name);
+        }
+        public function updatePhone($phone) {
+            global $conn;
+            $result = $conn->query("UPDATE userparticipant SET Participant_Phone = '$phone' WHERE Participant_ID = $this->participantID");
+            return $result;
+            // return updateParticipantInformation($this->participantID, "Phone", $phone);
+        }
+    }
+    function getParticipantNameArrayByEventId($eventId) {
+        $nameArray = array();
+        foreach(json_decode(getParticipantByEventID($eventId)) as $key => $value) {
+            foreach($value as $timestamp => $participantId) {
+                $participant = new participant($participantId);
+                array_push($nameArray, $participant->getName());
+            }
+        }
+        return $nameArray;
+    }
+    function getParticipantPhoneArrayByEventId($eventId) {
+        $phoneArray = array();
+        foreach(json_decode(getParticipantByEventID($eventId)) as $key => $value) {
+            foreach($value as $timestamp => $participantId) {
+                $participant = new participant($participantId);
+                array_push($phoneArray, $participant->getPhone());
+            }
+        }
+        return $phoneArray;
+    }
+    function getParticipantIdArrayByEventId($eventId) {
+        $idArray = array();
+        foreach(json_decode(getParticipantByEventID($eventId)) as $key => $value) {
+            foreach($value as $timestamp => $participantId) {
+                array_push($idArray, $participantId);
+            }
+        }
+        return $idArray;
+    }
+    function getParticipantTimestampArrayByEventId($eventId) {
+        $timestampArray = array();
+        foreach(json_decode(getParticipantByEventID($eventId)) as $key => $value) {
+            foreach($value as $timestamp => $participantId) {
+                array_push($timestampArray, $timestamp);
+            }
+        }
+        return $timestampArray;
     }
 ?>

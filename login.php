@@ -1,5 +1,8 @@
-<?php require('partials/database.php') ?>
-<?php require('partials/header.php') ?>
+<?php 
+require('partials/database.php');
+require('partials/header.php');
+ob_start();
+?>
 
 <h1>Login</h1>
 
@@ -19,6 +22,15 @@
     <input type="submit" value="Submit" class="submitBlockCentered">
 </form>    
 <?php 
+if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
+    // echo "valid: " . $_SESSION['valid'] . "<br>";
+    // echo "timeout: " . $_SESSION['timeout'] . "<br>";
+    // echo "email: " . $_SESSION['email'] . "<br>";
+    // echo "<p>You are already logged in as an " . $_SESSION['role'] . ".</p>";
+    // echo "<p>Please <a href='logout.php'>logout</a> first.</p>";
+
+    header("Location: dashboard.php");
+}
 if($_SERVER['REQUEST_METHOD'] === 'POST') { 
     $email = $_POST['email'];
     $password = (string)$_POST['password'];
@@ -27,14 +39,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(userExist($role, $email)) {
         if(userLogin($role, $email, $password)) {
             echo "<p>Thank you for logging in as an $role!</p>";
-            // post to dashboard.php
-            ?>
-            <form action="dashboard.php" method="post" id="toDash" hidden>
-                <input type="text" name="email" id="email" value="<?php echo $email ?>">
-                <input type="text" name="role" id="role" value="<?php echo $role ?>">
-            </form>   
-            <?php
-            echo "<script>document.getElementById('toDash').submit();</script>";
+            $_SESSION['valid'] = true;
+            $_SESSION['timeout'] = time();
+
+            $_SESSION['email'] = $email;
+            $_SESSION['role'] = $role;
+            header("Location: dashboard.php");
         } else {
             echo "<p>Wrong password.</p>";
         }
