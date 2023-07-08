@@ -7,8 +7,8 @@
 if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     $email = $_SESSION['email'];
     $role = $_SESSION['role'];
-    $participantID = getIdByEmail($email, $role);
-    $participant = new participant($participantID);
+    $userID = getIdByEmail($email, $role);
+    $participant = new participant($userID);
 
     if($role == "Organizer") {
         // if (!(isset($_POST['event_name']) 
@@ -22,26 +22,64 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
         if(!(isset($_POST['event_name']) && isset($_POST['event_duration'])) ) {
             if (!isset($_SESSION['event_code'])) {
                 ?>
-                <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-                    <!-- Event Name -->
-                    <label for="event_name">Event Name: </label>
-                    <input type="text" name="event_name" id="event_name" place required>
-                    <br>
-                    <!-- Event Duration -->
-                    <label for="event_duration">Event Duration: </label>
-                    <input type="radio" name="event_duration" id="event_duration" value="1" required>
-                    <label for="1">1m</label>
-                    <input type="radio" name="event_duration" id="event_duration" value="30" required>
-                    <label for="30">30m</label>
-                    <input type="radio" name="event_duration" id="event_duration" value="60" required>
-                    <label for="60">60m</label>
-                    <br>
-                    <input type="submit" value="Submit">
-                    <!-- Hidden -->
-                    <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
-                    <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>                
-                </form>   
-                <?php                 
+                <!-- Organizer dashboard -->
+                <div class="row container">
+                    <div class="col">
+                        <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                            <!-- Event Name -->
+                            <label for="event_name">Event Name: </label>
+                            <input type="text" name="event_name" id="event_name" place required>
+                            <br>
+                            <!-- Event Duration -->
+                            <label for="event_duration">Event Duration: </label>
+                            <input type="radio" name="event_duration" id="event_duration" value="1" required>
+                            <label for="1">1m</label>
+                            <input type="radio" name="event_duration" id="event_duration" value="30" required>
+                            <label for="30">30m</label>
+                            <input type="radio" name="event_duration" id="event_duration" value="60" required>
+                            <label for="60">60m</label>
+                            <br>
+                            <input type="submit" value="Submit">
+                            <!-- Hidden -->
+                            <!-- <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
+                            <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>                 -->
+                        </form>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 18rem;">
+                            <h5 class="card-title">Event History</h5>
+                            <!-- <p class="card-text" id="video-text">Camera 1</p> -->
+                            <?php
+                            $eventHistory = getEventsByOrganizerId($userID);
+                            if ($eventHistory != false) {
+                                foreach($eventHistory as $event) {
+                                    $participant = json_decode(getParticipantByEventID($event["Event_ID"]));
+                                    if ($participant == NULL) {
+                                        $participant = 0;
+                                    } else {
+                                        // print_r($participant);
+                                        $participant = count($participant);
+                                    }
+                                    ?>
+                                    <p class="eventHistoryItems">
+                                        <a href="event.php?eventID=<?php echo $event["Event_ID"] ?>">
+                                            (<?php echo $event["Event_ID"] ?>) ><?php echo $event["Event_Name"] ?><
+                                            <!-- [<?php echo $event["Event_End"] ?>] -->
+                                            +<?php echo $participant ?> participants
+                                        </a>
+                                    </p>
+                                    <?php
+                                }                                
+                            } else {
+                                echo "<p><i>No events history found</i></p>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+   
+                <?php    
+
             }
         } else { 
             if (!isset($_SESSION['event_code'])) {
@@ -64,25 +102,6 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
                 newEvent($event_organizerID, $event_name, $endTimeSQL, $event_code);
             }
         }
-            // if (!(isset($_SESSION['event_name']) && isset($_SESSION['endTime']) && isset($_SESSION['endTimeSQL']) && isset($_SESSION['event_organizerID']) && isset($_SESSION['event_code']))) {
-                // // Event form submitted
-                // $event_name = $_POST['event_name'];
-                // $event_duration = $_POST['event_duration'];
-                // $event_organizerID = getIdByEmail($email, $role);
-                // $event_code = (string)bin2hex(random_bytes(4));
-                // $event_code = strtoupper(substr($event_code, 0, 6));
-
-                // $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Singapore')); 
-                // $endTime = $currentDateTime->add(new DateInterval('PT' . $event_duration . 'M'));
-                // $endTimeSQL = $endTime->format('Y-m-d H:i:s');
-                // // echo "editted SQL time: " . $endTimeSQL . "<br>";
-                // // echo "<br>ID" . getIdByEmail($email, $role);
-                // $_SESSION['event_name'] = $event_name;
-                // $_SESSION['endTime'] = $endTime;
-                // $_SESSION['endTimeSQL'] = $endTimeSQL;
-                // $_SESSION['event_organizerID'] = $event_organizerID;
-                // $_SESSION['event_code'] = $event_code;                
-                // newEvent($event_organizerID, $event_name, $endTimeSQL, $event_code);
         if (isset($_SESSION['event_name']) && isset($_SESSION['endTime']) 
             && isset($_SESSION['endTimeSQL']) && isset($_SESSION['event_organizerID']) 
             && isset($_SESSION['event_code'])) {
@@ -102,6 +121,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
             
             $event_id = getEventIdByEventCode($event_code)["Event_ID"];
             ?>
+            <!-- Organizer Event view -->
             <div class="row">
                 <div class="col">
                     <h2><?php echo $event_name ?></h2>
@@ -193,60 +213,61 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     if($role == "Participant") {
         if(!isset($_POST['eventCode'])) {
             ?>
-            <!-- <h3>Scan QR Code</h3> -->
-            
-            <div class="card" style="width: 18rem;">
-                <video id="preview" class="card-img-top"></video>
-                <div class="card-body" id="video-card">
-                    <h5 class="card-title">Scan QR</h5>
-                    <p class="card-text" id="video-text">Camera 1</p>
+            <!-- Participant Dashboard View -->
+            <div class="row container">
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <video id="preview" class="card-img-top"></video>
+                        <div class="card-body" id="video-card">
+                            <h5 class="card-title">Scan QR</h5>
+                            <p class="card-text" id="video-text">Camera 1</p>
 
+                        </div>
+                    </div>
+                    
+                    <script src="./javascript/qrscanner.js"></script>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body" id="video-card">
+                            <h5 class="card-title">User information</h5>
+                            <?php
+                            if (isset($_POST['userName']) && isset($_POST['userPhone'])) {
+                                $userName = $_POST['userName'];
+                                $userPhone = $_POST['userPhone'];
+
+                                if($participant->updateName($userName) &&
+                                    $participant->updatePhone($userPhone)) {
+                                    echo "<p>Info updated</p>";
+                                } else {
+                                    echo "<p>Error updating info</p>";
+                                }
+                            }
+                            ?>
+                            <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                                <label for="userName">Name: </label>
+                                <input type="text" name="userName" id="userName" 
+                                    value="<?php 
+                                        if ($participant->getName()) echo $participant->getName();
+                                        ?>">
+                                <br>
+                                <label for="userPhone">Phone: </label>
+                                <input type="tel" name="userPhone" id="userPhone" 
+                                    value="<?php 
+                                        if ($participant->getPhone()) echo $participant->getPhone() 
+                                        ?>">
+                                <input type="submit" value="Join">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <script src="./javascript/qrscanner.js"></script>
-
-            <div class="card" style="width: 18rem;">
-                <div class="card-body" id="video-card">
-                    <h5 class="card-title">User information</h5>
-                    <?php
-                    if (isset($_POST['userName']) && isset($_POST['userPhone'])) {
-                        $userName = $_POST['userName'];
-                        $userPhone = $_POST['userPhone'];
-
-                        if($participant->updateName($userName) &&
-                            $participant->updatePhone($userPhone)) {
-                            echo "<p>Info updated</p>";
-                        } else {
-                            echo "<p>Error updating info</p>";
-                        }
-                    }
-                    ?>
-                    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
-                        <label for="userName">Name: </label>
-                        <input type="text" name="userName" id="userName" 
-                            value="<?php 
-                                if ($participant->getName()) echo $participant->getName();
-                                ?>">
-                        <br>
-                        <label for="userPhone">Phone: </label>
-                        <input type="tel" name="userPhone" id="userPhone" 
-                            value="<?php 
-                                if ($participant->getPhone()) echo $participant->getPhone() 
-                                ?>">
-
-                        <input type="submit" value="Join">
-                    </form>
-
-                </div>
-            </div>
-
             <?php     
         } else {
             // Participant form submitted
             $event_code = $_POST['eventCode'];
             $eventID = $_POST['eventID'];
-            if(participantJoinEvent($participantID, $eventID)) {
+            if(participantJoinEvent($userID, $eventID)) {
                 echo "<span>$event_code</span>";
                 echo "<p>Thank you for joining the event!</p>";
                 $message = getParticipantByEventID($eventID);

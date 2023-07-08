@@ -12,7 +12,7 @@
     } 
     function userExist($role, $email) {
         $rID = $role . "_ID";
-        $rTable = "user" . $role;
+        $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         global $conn;
         $result = $conn->query("SELECT $rID FROM $rTable WHERE $rEmail = '$email'");
@@ -20,7 +20,7 @@
         else return true;
     }
     function userRegister($role, $email, $password) {
-        $rTable = "user" . $role;
+        $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
         global $conn;
@@ -29,7 +29,7 @@
         else return false;
     }
     function userLogin($role, $email, $password) {
-        $rTable = "user" . $role;
+        $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
         global $conn;
@@ -39,7 +39,7 @@
     }
     function getIdByEmail($email, $role) {
         $rID = $role . "_ID";
-        $rTable = "user" . $role;
+        $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         global $conn;
         $result = $conn->query("SELECT $rID FROM $rTable WHERE $rEmail = '$email'");
@@ -148,6 +148,10 @@
             $row = getParticipantInformation($this->participantID);
             return $row["Participant_Phone"];
         }
+        public function getEmail() {
+            $row = getParticipantInformation($this->participantID);
+            return $row["Participant_Email"];
+        }
         public function updateName($name) {
             global $conn;
             $result = $conn->query("UPDATE userparticipant SET Participant_Name = '$name' WHERE Participant_ID = $this->participantID");
@@ -200,5 +204,24 @@
             }
         }
         return $timestampArray;
+    }
+    function getEventsByOrganizerId($organizerId) {
+        global $conn;
+        $result = $conn->query("SELECT * FROM events WHERE Organizer_ID = '$organizerId' ORDER BY Event_ID DESC");
+        if($result->num_rows > 0) {
+            // $row = $result->fetch_assoc();
+            // return $row;
+            return $result;
+        }
+        else return false;
+    }
+    function getEventByEventID($eventId) {
+        global $conn;
+        $result = $conn->query("SELECT * FROM events WHERE Event_ID = '$eventId'");
+        if($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row;
+        }
+        else return false;
     }
 ?>

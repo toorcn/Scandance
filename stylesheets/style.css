@@ -10,6 +10,8 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
+    pointer-events: none;
+
 
     /* border: 1px solid black; */
     /* background-color: rgba(240,80,80,0.5); */
@@ -35,4 +37,11 @@ body {
     padding: 0.4rem;
     margin: 1vh auto;
     display: block;
+}
+.eventHistoryItems {
+    border: 1px solid black;
+}
+.eventHistoryItems > a, .eventHistoryItems > a > div, .eventHistoryItems > div > a  {
+    text-decoration: none;
+    color: #cdb4db;
 }

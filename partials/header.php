@@ -45,7 +45,7 @@
                         <?php
                     } else {
                         ?>
-                        <a href="clearQRSession.php" class="btn btn-outline-light me-2">Clear QR Session</a>
+                        <a href="clearQRSession.php" class="btn btn-outline-light me-2">Clear Event Session</a>
                         <a href="logout.php" class="btn btn-outline-light me-2">Logout</a>
                         <?php
                     }
