@@ -13,22 +13,59 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
     if (!isset($_SESSION['event_code'])) {
         ?>
         <!-- Organizer dashboard -->
-        <div class="row container">
-            <section id="new">
-                <div class="col mt-2 text-center">
+        <div class="container">
+<!-- TEMP MARKER -->
+            <!-- <section id="new"> -->
+        <div class="position-relative" style="width: 100%; height: 89vh;">
+            <div class="position-absolute text-center" style="left: 50%; top: 40%; transform: translate(-50%, -50%);">
+                <div class="card sm" id="signInCard">
+                    <div class="card-body">
+                        <h2 class="card-title">Scandance Events</h2>
+                        <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+                            <!-- TODO animations when entering -->
+                            <div class="form-group mb-3 form-floating">
+                                <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Event Name" required>
+                                <label for="event_name" class="form-label">Event Name</label>
+                            </div>
+                            <div class="form-group mb-2 form-floating">
+                                    <input type="text" name="event_duration" id="event_duration" class="form-control" placeholder="Event Duration" value="15" required>
+                                <label for="event_duration" class="form-label">Event Duration (minutes)</label>
+                            </div>
+                            <!-- TODO duration present update to better interactions -->
+                            <div class="form-group row mb-2">
+                                <label for="event_duration" class="col-sm-4 col-form-label">Duration Presents</label>
+                                <button type="button" class="btn btn-outline-light text-black col-auto" onclick="updateEventDuration(1)">1</button>
+                                <button type="button" class="btn btn-outline-light text-black col-auto" onclick="updateEventDuration(15)">15</button>
+                                <button type="button" class="btn btn-outline-light text-black col-auto" onclick="updateEventDuration(30)">30</button>
+                            </div>
+                            <script>
+                                function updateEventDuration(duration) {
+                                    document.getElementById("event_duration").value = duration;
+                                }
+                            </script>
+                            <!-- End of todo -->
+                            <button type="submit" class="btn btn-outline-dark mb-2" style="width:100%;">Create Events</button>
+                        </form>
+                    </div>
+                </div>    
+                <div><a href="./eventhistory.php" class="btn btn-outline-dark mt-5" style="width: 60%">View History</a></div>
+            </div>
+        </div>
+                <!-- previous -->
+                <!-- <div class="col mt-2 text-center">
                     <h5 class="">Create Event</h5>
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post"> -->
                         <!-- Event Name -->
-                        <div class="form-group row mb-2">
-                            <label for="event_name" class="col-sm-4 col-form-label">Event Name</label>
+                        <!-- <div class="form-group row mb-2">
+                            <label for="event_name" class="col-sm-4 col-form-label">Event Name</label> -->
                             <!-- <label for="event_name" class="col-sm-2 col-form-label">Event Name: </label> -->
-                            <div class="col-5">
+                            <!-- <div class="col-5">
                                 <input type="text" name="event_name" id="event_name" class="form-control" placeholder="Event Name" required>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Event Duration -->
 
-                        <div class="form-group row mb-2">
+                        <!-- <div class="form-group row mb-2">
                             <label for="event_duration" class="col-sm-4 col-form-label">Event Duration</label>
                             <div class="col-4">
                                 <input type="text" name="event_duration" id="event_duration" class="form-control" placeholder="Event Duration" value="15" required>
@@ -47,7 +84,7 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
                             function updateEventDuration(duration) {
                                 document.getElementById("event_duration").value = duration;
                             }
-                        </script>
+                        </script> -->
                         <!-- <div class="form-group row mb-2"> -->
                         <!-- click for present values to update event_duration -->
                         <!-- <div class="col-4"></div> -->
@@ -72,45 +109,15 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
                                 <input type="radio" name="event_duration" id="event_duration" value="60" required>
                                 <label for="60">60m</label>
                                 <br> -->
-                        <input type="submit" value="Create" class="btn btn-outline-dark">
+                        <!-- <input type="submit" value="Create" class="btn btn-outline-dark"> -->
                         <!-- Hidden -->
                         <!-- <input type="text" name="email" id="email" value="<?php echo $email ?>" hidden>
                                 <input type="text" name="role" id="role" value="<?php echo $role ?>" hidden>                 -->
-                    </form>
-                </div>
-            </section>
-            <section id="history">
-                <div class="col text-center mt-2">
-                    <div class="card" style="width: 18rem;">
-                        <h5 class="card-title">Event History</h5>
-                        <!-- <p class="card-text" id="video-text">Camera 1</p> -->
-                        <?php
-                        $eventHistory = getEventsByOrganizerId($userID);
-                        if ($eventHistory != false) {
-                            foreach ($eventHistory as $event) {
-                                $participant = json_decode(getParticipantByEventID($event["Event_ID"]));
-                                if ($participant == NULL) {
-                                    $participant = 0;
-                                } else {
-                                    // print_r($participant);
-                                    $participant = count($participant);
-                                }
-                        ?>
-                                <p class="eventHistoryItems">
-                                    <a href="event.php?eventID=<?php echo $event["Event_ID"] ?>">
-                                        (<?php echo $event["Event_ID"] ?>) ><?php echo $event["Event_Name"] ?>< <!-- [<?php echo $event["Event_End"] ?>] -->
-                                            +<?php echo $participant ?> participants
-                                    </a>
-                                </p>
-                        <?php
-                            }
-                        } else {
-                            echo "<p><i>No events history found</i></p>";
-                        }
-                        ?>
-                    </div>
-                </div>
-            </section>
+                    <!-- </form>
+                </div> -->
+            <!-- </section> -->
+<!-- TEMP MARKER             -->
+            
         </div>
 
     <?php
@@ -177,7 +184,7 @@ if (
                 DisplayFormat = "%%M%% minutes %%S%% seconds";
                 FinishMessage = "Event Expired";
             </script>
-            <div><a href="./clearQRSession.php" class="btn btn-outline-dark">Stop now</a></div>
+            <div><a href="clearQRSession.php" class="btn btn-outline-dark">Stop now</a></div>
 
         </div>
         <script>

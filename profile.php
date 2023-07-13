@@ -30,15 +30,15 @@ if ($_SESSION["role"] == "Participant") {
                 }
             }
             ?>
-            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                <div class="form-group mb-3 form-floating">
+            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" class="text-center">
+                <div class="form-group mb-3">
                     <input type="text" name="userName" class="form-control" id="userName" value="<?php
                         if ($participant->getName()) echo $participant->getName();
                         ?>">
                     <label for="userName">Name: </label>                                            
                 </div>
                 
-                <div class="form-group mb-5 form-floating">
+                <div class="form-group mb-3">
                     <input type="tel" name="userPhone" class="form-control" id="userPhone" value="<?php
                         if ($participant->getPhone()) echo $participant->getPhone()
                         ?>">
@@ -46,10 +46,10 @@ if ($_SESSION["role"] == "Participant") {
 
                 </div>
 
-                <input type="submit" class="btn btn-outline-dark" value="Update">
+                <input type="submit" class="btn btn-outline-dark" value="Update" >
             </form>
         </div>
-        <a href="logout.php" class="btn btn-outline-dark mt-5">Logout</a>
+        <a href="logout.php" class="btn btn-outline-dark mt-5" style="width:100%;">Logout</a>
 
     </div>
 
