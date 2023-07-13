@@ -29,7 +29,13 @@ if ($_SESSION["role"] == "Participant") {
                         id="userName" 
                         type="text" 
                         name="userName" 
-                        value="<?php if ($participant->getName()) echo $participant->getName(); ?>"
+                        value="<?php 
+                            if (isset($_POST['userName'])) {
+                                echo $_POST['userName'];
+                            } else {
+                                if ($participant->getName()) echo $participant->getName(); 
+                            }
+                            ?>"
                         >
                     <label for="userName">Name</label>                                            
                 </div>
@@ -41,9 +47,15 @@ if ($_SESSION["role"] == "Participant") {
                     <input 
                         class="form-control" 
                         id="userPhone" 
-                        type="tel" 
+                        type="number" 
                         name="userPhone"
-                        value="<?php if ($participant->getPhone()) echo $participant->getPhone(); ?>"
+                        value="<?php
+                            if (isset($_POST['userPhone'])) {
+                                echo $_POST['userPhone'];
+                            } else {
+                                if ($participant->getPhone()) echo $participant->getPhone();    
+                            }
+                        ?>"
                         >
                     <label for="userPhone">Phone</label>
                 </div>

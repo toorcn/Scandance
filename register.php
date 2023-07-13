@@ -145,13 +145,17 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                     // check if password and passwordConfirm match on submit
                     $('#registerBtn').on('click', function (e) {
                         e.preventDefault();
-                        var password = $('#password').val();
-                        var passwordConfirm = $('#passwordConfirm').val();
-                        if (password != passwordConfirm) {
-                            $('#submitErrorResponseBox').html("<p>Passwords do not match!</p>");
-                        } else {
-                            $('#registerForm').submit();
-                        }
+                        // var password = $('#password').val();
+                        // var passwordConfirm = $('#passwordConfirm').val();
+                        // if (password != passwordConfirm) {
+                        //     $('#submitErrorResponseBox').html("<p>Passwords do not match!</p>");
+                        // } else {
+                            if($('#passwordError').attr('hidden') == undefined && $('#passwordConfirmError').attr('hidden') == undefined) {
+                                $('#registerForm').submit();
+                            } else {
+                                $('#submitErrorResponseBox').html("<p>Please check your password!</p>");
+                            }
+                        // }
                     });
                 </script>
                 <p 

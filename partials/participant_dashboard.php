@@ -4,10 +4,10 @@ if (!isset($_POST['eventCode'])) {
     <div class="container">
         <!-- TODO CHECK  -->
         <div 
-            class="position-relative" 
+            class="" 
             style="
-                width: 100%; 
-                height: 88vh;"
+             
+                height: 85vh;"
             >
             <div 
                 class="position-absolute" 
@@ -25,7 +25,8 @@ if (!isset($_POST['eventCode'])) {
                             class="
                                 row 
                                 row-cols-auto
-                                g-3"
+                                g-3
+                                "
                             >
                             <h5 
                                 class="
@@ -42,13 +43,19 @@ if (!isset($_POST['eventCode'])) {
                                     col-12
                                     btn 
                                     btn-outline-dark 
-                                    pt-2
-                                    pb-2
-                                    mb-1"
+                                    py-2
+                                    mb-1
+                                    "
                                 id="startScan"
                                 data-active='0'
                                 >Begin scan</a>
-                            <!-- <div class="card-text row mb-1" id="video-text"></div> -->    
+                            <div class="card-text row mb-1" id="video-text"
+                                style="
+                                    width: 100%;
+                                    text-align: center;
+                                    margin: auto;
+                                    "
+                                ></div>    
                         </div>
                         
                         <hr>
@@ -73,8 +80,7 @@ if (!isset($_POST['eventCode'])) {
                                     class="
                                         form-control
                                         text-center 
-                                        pt-2 
-                                        pb-2"
+                                        py-2"
                                     id="input_event_code" 
                                     type="text" 
                                     name="input_event_code"
@@ -87,8 +93,7 @@ if (!isset($_POST['eventCode'])) {
                                 class="
                                     col-sm-4
                                     col-12
-                                    pt-2
-                                    pb-2
+                                    py-2
                                     mb-3
                                     btn 
                                     btn-outline-dark" 

@@ -84,7 +84,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                                     header("Location: dashboard.php");
                                 } else {
                                     // login failed 
-                                    echo "<p>Incorrect password.</p>";
+                                    echo "<p>An unexpected error ocurred. Try again later.</p>";
                                 }
                             } else {
                                 // User not registered

@@ -27,7 +27,7 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
         <div class="container">
 <!-- TEMP MARKER -->
             <!-- <section id="new"> -->
-        <div class="position-relative" style="width: 100%; height: 88vh;">
+        <div class="position-relative" style="width: 100%; height: 85vh;">
             <div class="position-absolute text-center" style="left: 50%; top: 40%; transform: translate(-50%, -50%);">
                 <div class="card sm" id="signInCard">
                     <div class="card-body">
@@ -43,7 +43,7 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
                                 <label for="event_duration" class="form-label">Event Duration (minutes)</label>
                             </div>
                             <!-- TODO duration present update to better interactions -->
-                            <div class="form-group row mb-2">
+                            <div class="form-group row mb-2 px-2">
                                 <label for="event_duration" class="col-sm-4 col-form-label">Duration Presents</label>
                                 <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(1)">1</button>
                                 <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(15)">15</button>
