@@ -3,7 +3,7 @@
     $dbusername = "root";
     $dbpassword = "";
     $dbname = "Scandance";
-
+    // TODO https://www.w3schools.com/php/func_mysqli_close.asp
     // Create connection
     $conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
     // Check connection
@@ -20,6 +20,7 @@
         else return true;
     }
     function userRegister($role, $email, $password) {
+        // TODO change password to use hash
         $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
@@ -29,6 +30,7 @@
         else return false;
     }
     function userLogin($role, $email, $password) {
+        // TODO change password to use hash checking 
         $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
@@ -218,6 +220,16 @@
     function getEventByEventID($eventId) {
         global $conn;
         $result = $conn->query("SELECT * FROM events WHERE Event_ID = '$eventId'");
+        if($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row;
+        }
+        else return false;
+    }
+
+    function getEventByEventCode($eventCode) {
+        global $conn;
+        $result = $conn->query("SELECT * FROM events WHERE Event_Code = '$eventCode'");
         if($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             return $row;

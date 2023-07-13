@@ -2,25 +2,31 @@
 <?php require('partials/header.php') ?>
 
 <?php
-if(isset($_GET['eventCode'])) { 
+if(isset($_GET['qridentifier'])) { 
     $email = $_SESSION['email'];
     $role = $_SESSION['role'];
-    $event_code = $_GET['eventCode'];
+    $userId = getIdByEmail($email, $role);
+    $qridentifier = $_GET['qridentifier'];
     // parse event_code
-    $code_explode = explode(":", $event_code);
-    $code_orgId = $code_explode[0];
-    $code_eventName = $code_explode[1];
-    $code_code = $code_explode[2];
+    $event_code = substr($qridentifier, -6);
+    $event = getEventByEventCode($event_code);
+    $event_id = $event["Event_ID"];
+    $organizer_id = $event["Organizer_ID"];
+    $event_name = $event["Event_Name"];
 
-    $event_id = getEventIdByEventCode($code_code)["Event_ID"];
-    if(hasJoinedEvent(getIdByEmail($email, $role), $event_id)) {
+    if(hasJoinedEvent($userId, $event_id)) {
         echo "<p>You have already joined this event.</p>";
         exit();
     } else {
-        participantJoinEvent(getIdByEmail($email, $role), $event_id);
-        echo "<p>Thank you for joining the <strong>$code_eventName</strong>!</p>";
+        participantJoinEvent($userId, $event_id);
+        echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";
     }
 } 
+if(isset($_POST['eventCode'])) {
+    $event_code = $_POST['eventCode'];
+
+    header("Location: scansuccess.php?qridentifier=$event_code");
+}
 ?>
 
 <?php require('partials/footer.php') ?>

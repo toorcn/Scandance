@@ -52,7 +52,7 @@ if (typeof (ForeColor) == "undefined")
 if (typeof (TargetDate) == "undefined")
     TargetDate = "12/31/2020 5:00 AM";
 if (typeof (DisplayFormat) == "undefined")
-    DisplayFormat = "%%D%% Days, %%H%% Hours, %%M%% Minutes, %%S%% Seconds.";
+    DisplayFormat = "%%D%% days %%H%% hours %%M%% minutes %%S%% seconds";
 if (typeof (CountActive) == "undefined")
     CountActive = true;
 if (typeof (FinishMessage) == "undefined")

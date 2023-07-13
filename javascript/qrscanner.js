@@ -1,10 +1,11 @@
-let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false });
+let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false, backgroundScan: false });
 scanner.addListener('scan', function (content) {
     // QR Code scanned
     // post to scansucess.php
     let eventCode = content;
-    // alert("QR Code Scanned: " + eventCode);
-    window.location.href = "scansuccess.php?eventCode=" + eventCode;
+    // header("Location: scansuccess.php?qridentifier=$event_code");
+
+    window.location.href = "scansuccess.php?qridentifier=" + eventCode;
     // header("Location: scansuccess.php?eventCode=" + eventCode);
     console.log(content);
 });
@@ -12,7 +13,7 @@ Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {
         for (let i = 0; i < cameras.length; i++) {
             document.getElementById("video-card").innerHTML += 
-            "<a href='#' class='camera-switches btn btn-primary p-1 m-1' data-cam='"+i+"'>Camera " + (i+1) + "</a>";
+            "<a href='#' class='camera-switches btn btn-outline-dark p-1 m-1' data-cam='"+i+"'>Camera " + (i+1) + "</a>";
         }
         // when clicked start scanner of that camera
         $(".camera-switches").click(function() {

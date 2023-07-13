@@ -26,7 +26,7 @@ foreach($eventParticipants as $participant) {
 $filename = "export.csv";
 $filenameClient = "Scandance_" . $event_name . "_" . date("Y-m-d") . ".csv";
 $output = fopen($filename, "w");  
-fputcsv($output, array('Participant ID', 'Participant Name', 'Participant Phone', 'Participant Email')); 
+fputcsv($output, array('ID', 'Name', 'Phone', 'Email')); 
 
 foreach($listForCSV as $row) {  
     fputcsv($output, $row);  

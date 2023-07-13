@@ -5,6 +5,6 @@
    unset($_SESSION["email"]);
    unset($_SESSION["role"]);
    
-   echo 'You have logout of this session.';
-   header('Refresh: 1; URL = login.php');
+   echo 'Logout successful!';
+   header('Refresh: 0; URL = login.php');
 ?>

@@ -1,0 +1,25 @@
+html {
+    scroll-behavior:smooth;
+}
+#dashboardNavigation {
+    display: flex;
+    justify-content: center;
+    /* height: 100%; */
+    width: auto;
+}
+#dashboardNavigation > .card {
+    margin-right: 1rem;
+}
+/* #dashboardNavigation {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 60vh;
+}*/
+#dashboardNavigation > a {
+    /* width: 25%;
+    margin: 10px;
+    height: 50%; */
+    text-decoration: none;
+    color: black;
+} 
