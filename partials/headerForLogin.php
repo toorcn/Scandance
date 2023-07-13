@@ -37,10 +37,16 @@
                         <a href="register.php" class="btn btn-outline-dark me-2">Sign up</a>
                         <?php
                     } else {
-                        ?>
-                        <a href="clearQRSession.php" class="btn btn-outline-dark me-2">Clear Event Session</a>
-                        <a href="logout.php" class="btn btn-outline-dark me-2">Logout</a>
-                        <?php
+                        if ($_SESSION['role'] == "Organizer") {
+                            ?>
+                            <a href="logout.php" class="btn btn-outline-dark me-2">Logout</a>
+                            <?php
+                        }
+                        if ($_SESSION['role'] == "Participant") {
+                            ?>
+                            <a href="profile.php" class="btn btn-outline-dark me-2">Profile</a>
+                            <?php
+                        }
                     }
                     ?>
                 </div>

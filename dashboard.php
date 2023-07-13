@@ -13,7 +13,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     if($role == "Organizer") {
         // Organizer Dashboard View
         ?>
-        <link rel="stylesheet" href="./stylesheets/organizerStyle.css">
+        <!-- <link rel="stylesheet" href="./stylesheets/organizerStyle.css">
         <section style="height: 100vh;">
             <div class="position-relative" style="width: 100%; height: 100%;">
                 <div class="position-absolute" style="left: 50%; top: 40%; transform: translate(-50%, -50%);">
@@ -45,7 +45,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
                 scrollTop: $(id).offset().top - topSpace
             }, 800);
         });
-        </script>
+        </script> -->
         
         <?php
         require('partials/organizer_dashboard.php');
@@ -55,6 +55,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
         <?php
     }
     if($role == "Participant") {
+        // Participant Dashboard View
         require('partials/participant_dashboard.php');
         ?>
 <!-- QR Code Scanner JS -->

@@ -18,6 +18,7 @@ body {
         /* width: 370px; */
         border: none;
     }
+}
 
 .align-center {
     text-align: center;
@@ -61,4 +62,8 @@ body {
 .eventHistoryItems > a, .eventHistoryItems > a > div, .eventHistoryItems > div > a  {
     text-decoration: none;
     color: #cdb4db;
+}
+#preview {
+    max-width: 100%;
+    max-height: 50vh;
 }

@@ -162,7 +162,7 @@ if (
     $event_id = getEventIdByEventCode($event_code)["Event_ID"];
     ?>
     <!-- Organizer Event view -->
-    <div class="row">
+    <div class="row" style="height: 100vh; align-items: center;">
         <div class="col text-center">
             <div class="h2 text-muted"><?php echo $event_name ?></div>
             <img src='<?php echo $qrCodeUrl ?>' alt='QR Code'>
@@ -177,6 +177,8 @@ if (
                 DisplayFormat = "%%M%% minutes %%S%% seconds";
                 FinishMessage = "Event Expired";
             </script>
+            <div><a href="./clearQRSession.php" class="btn btn-outline-dark">Stop now</a></div>
+
         </div>
         <script>
             var activateOnceFlag = false;
@@ -201,6 +203,7 @@ if (
                 <div>
                     <span class="h4">Live Preview</span>
                     <span class="text-muted">(Total: <span id="attendanceCount">0</span>)</span>
+
                 </div>
                 <div id="liveAttendance"></div>
             </div>

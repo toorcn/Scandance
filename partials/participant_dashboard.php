@@ -1,5 +1,6 @@
 <?php
 if (!isset($_POST['eventCode'])) {
+    
 ?>
     <!-- Participant Dashboard View -->
     <div class="container">
@@ -7,7 +8,7 @@ if (!isset($_POST['eventCode'])) {
 <div class="position-relative" style="width: 100%; height: 89vh;">
     <div class="position-absolute" style="left: 50%; top: 45%; transform: translate(-50%, -50%);">
             <div class="card" style="width: 400px;">
-                <video id="preview" class="card-img-top"></video>
+                <video id="preview" class="card-img-top" style="max-height: 500px;"></video>
                 <div class="card-body" id="video-card">
                     <h5 class="card-title">Scan QR</h5>
                     <!-- <p class="card-text" id="video-text">Camera 1</p> -->
@@ -27,38 +28,7 @@ if (!isset($_POST['eventCode'])) {
             <script src="./javascript/qrscanner.js"></script>
 </div>
 </div>
-            <div class="card" style="width: 18rem;">
-                <div class="card-body" id="video-card">
-                    <h5 class="card-title">User information</h5>
-                    <?php
-                    if (isset($_POST['userName']) && isset($_POST['userPhone'])) {
-                        $userName = $_POST['userName'];
-                        $userPhone = $_POST['userPhone'];
-
-                        if (
-                            $participant->updateName($userName) &&
-                            $participant->updatePhone($userPhone)
-                        ) {
-                            echo "<p>Info updated</p>";
-                        } else {
-                            echo "<p>Error updating info</p>";
-                        }
-                    }
-                    ?>
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                        <label for="userName">Name: </label>
-                        <input type="text" name="userName" id="userName" value="<?php
-                                                                                if ($participant->getName()) echo $participant->getName();
-                                                                                ?>">
-                        <br>
-                        <label for="userPhone">Phone: </label>
-                        <input type="tel" name="userPhone" id="userPhone" value="<?php
-                                                                                    if ($participant->getPhone()) echo $participant->getPhone()
-                                                                                    ?>">
-                        <input type="submit" class="btn btn-outline-dark" value="Join">
-                    </form>
-                </div>
-            </div>
+            
     </div>
 <?php
 } else {
