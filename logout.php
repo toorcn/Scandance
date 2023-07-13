@@ -1,10 +1,6 @@
-<?php
+<?php // [COMPLETE 13/7/23]
    session_start();
-   unset($_SESSION["valid"]);
-   unset($_SESSION["timeout"]);
-   unset($_SESSION["email"]);
-   unset($_SESSION["role"]);
-   
-   echo 'Logout successful!';
-   header('Refresh: 0; URL = login.php');
+   session_destroy();
+
+   header("Location: login.php");
 ?>

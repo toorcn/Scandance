@@ -1,5 +1,4 @@
-<?php
-
+<?php // [COMPLETE 13/7/23]
 $listForCSV = array();
 
 require('partials/database.php');
@@ -39,6 +38,4 @@ header("Content-Disposition: attachment; filename=$filenameClient");
 
 // Output the contents of the file to the browser.
 readfile($filename);
-
-// header("Location: event.php?eventID=$event_id")
 ?>

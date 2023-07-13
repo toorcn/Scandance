@@ -1,32 +1,58 @@
-<?php require('partials/database.php') ?>
-<?php require('partials/header.php') ?>
-
-<?php
-if(isset($_GET['qridentifier'])) { 
-    $email = $_SESSION['email'];
-    $role = $_SESSION['role'];
-    $userId = getIdByEmail($email, $role);
-    $qridentifier = $_GET['qridentifier'];
-    // parse event_code
-    $event_code = substr($qridentifier, -6);
-    $event = getEventByEventCode($event_code);
-    $event_id = $event["Event_ID"];
-    $organizer_id = $event["Organizer_ID"];
-    $event_name = $event["Event_Name"];
-
-    if(hasJoinedEvent($userId, $event_id)) {
-        echo "<p>You have already joined this event.</p>";
-        exit();
-    } else {
-        participantJoinEvent($userId, $event_id);
-        echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";
-    }
-} 
-if(isset($_POST['eventCode'])) {
-    $event_code = $_POST['eventCode'];
-
-    header("Location: scansuccess.php?qridentifier=$event_code");
-}
+<?php // [MAJOR-CHANGES-NEEDED 13/7/23]
+require('partials/database.php');
+require('partials/headerForLogin.php');
 ?>
+<div class="container">
+    <a class="btn btn-outline-dark mb-4" href="dashboard.php">Back</a>
+    <?php
+    // TODO presentation of text/response
+    function joinEvent($userID, $eventID, $eventCode) {
+        $event = getEventByEventCode($eventCode);
+        if ($event == null) {
+            echo "<p>Invalid event code. Please try again!</p>";
+            exit();
+        }
+        $event_name = $event["Event_Name"];
+        if(hasJoinedEvent($userID, $eventID)) {
+            echo "<p>You have already joined this event.</p>";
+            exit();
+        } else {
+            participantJoinEvent($userID, $eventID);
+            echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";
+        }
+    }
+    if($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $email = $_SESSION['email'];
+        $role = $_SESSION['role'];
+        $user_id = getIdByEmail($email, $role);  
+        if(isset($_GET['input_event_code'])) {
+            $event_code = $_GET['input_event_code'];
+            $event_id = getEventIdByEventCode($event_code);
 
-<?php require('partials/footer.php') ?>
+            joinEvent($user_id, $event_id, $event_code);
+        }
+        if(isset($_GET['qridentifier'])) {
+            $qridentifier = $_GET['qridentifier'];
+            // TODO redo condition
+            if(strlen($qridentifier) != 12) {
+                echo "<p>Invalid scan. Please try again!</p>";
+                exit();
+            }
+            // parse event_code
+            $event_code = substr($qridentifier, -6);
+            $event = getEventByEventCode($event_code);
+            $event_id = $event["Event_ID"];
+            $organizer_id = $event["Organizer_ID"];
+        
+            joinEvent($user_id, $event_id, $event_code);
+        }
+    }
+    if(isset($_POST['eventCode'])) {
+        $event_code = $_POST['eventCode'];
+        header("Location: scansuccess.php?qridentifier=$event_code");
+    }
+    ?>
+</div>
+<?php
+require('partials/footer.php'); 
+?>

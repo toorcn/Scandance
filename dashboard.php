@@ -1,9 +1,7 @@
-<?php require('partials/database.php') ?>
-<?php require('partials/headerForLogin.php') ?>
-<!-- QR Code Scanner JS -->
-<script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-<!--  -->
-<?php
+<?php // [ESSENTIALLY-COMPLETE 13/7/23]
+require('partials/database.php');
+require('partials/headerForLogin.php');
+
 if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     $email = $_SESSION['email'];
     $role = $_SESSION['role'];
@@ -13,6 +11,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     if($role == "Organizer") {
         // Organizer Dashboard View
         ?>
+        <!-- Experimental interface -->
         <!-- <link rel="stylesheet" href="./stylesheets/organizerStyle.css">
         <section style="height: 100vh;">
             <div class="position-relative" style="width: 100%; height: 100%;">
@@ -47,9 +46,7 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
         });
         </script> -->
         
-        <?php
-        require('partials/organizer_dashboard.php');
-        ?>
+        <?php require('partials/organizer_dashboard.php'); ?>
         <!-- Countdown JS -->
         <script type="text/javascript" src="./javascript/countdown.js"></script>        
         <?php
@@ -57,15 +54,10 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
     if($role == "Participant") {
         // Participant Dashboard View
         require('partials/participant_dashboard.php');
-        ?>
-<!-- QR Code Scanner JS -->
-<script type="text/javascript" src="./javascript/qrscanner.js"></script>        
-        <?php
     }
 } else {
     // Redirect to login page
-    header('Refresh: 0; URL = login.php');
+    header("Location: login.php");
 }
+require('partials/footer.php');
 ?>
-
-<?php require('partials/footer.php') ?>

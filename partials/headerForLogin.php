@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php // [ESSENTIALLY COMPLETE 13/7/23]
+session_start(); 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,43 +16,52 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c1a2801db9.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./stylesheets/style.css">
     <link rel="icon" type="image/png" href="../icon.png" />
 </head>
 
 <body>
-    <header class="p-2 rounded-4 rounded-top-0">
-        <div class="container">
-            <div class="align-items-center" style="display: flex;">
-                <a href="/s4webdevgroup" class="fs-4 text-decoration-none link-dark" id="scandanceNavTitle">
-                    <p>Scandance<sup>&copy</sup></p>
-                </a>
-                <!-- End right -->
-                <div style="margin-left: auto;">
-                <!-- TODO changing nav items -->
+    <header 
+        class="container 
+                p-2 
+                rounded-4 
+                rounded-top-0"
+        >
+        <div 
+            class="align-items-center" 
+            style="display: flex;"
+            >
+            <a 
+                class="fs-4 
+                        text-decoration-none 
+                        link-dark" 
+                id="scandanceNavTitle"        
+                href="/s4webdevgroup"
+                >
+                <p>Scandance<sup>&copy</sup></p>
+            </a>
+            <div style="margin-left: auto;">
+                <?php 
+                if(!(isset($_SESSION['valid']) && $_SESSION['valid'] == true)) {
+                    // Not logged in
+                    ?>
+                    <a href="login.php" class="btn btn-outline-dark me-2">Sign up</a>
                     <?php
-                    // if$_SERVER['PHP_SELF']
-                    ?>
-                                        <?php 
-                    if(!(isset($_SESSION['valid']) && $_SESSION['valid'] == true)) {
+                } else {
+                    if ($_SESSION['role'] == "Organizer") {
                         ?>
-                        <a href="register.php" class="btn btn-outline-dark me-2">Sign up</a>
+                        <a href="logout.php" class="btn btn-outline-dark me-2">Logout</a>
                         <?php
-                    } else {
-                        if ($_SESSION['role'] == "Organizer") {
-                            ?>
-                            <a href="logout.php" class="btn btn-outline-dark me-2">Logout</a>
-                            <?php
-                        }
-                        if ($_SESSION['role'] == "Participant") {
-                            ?>
-                            <a href="profile.php" class="btn btn-outline-dark me-2">Profile</a>
-                            <?php
-                        }
                     }
-                    ?>
-                </div>
+                    if ($_SESSION['role'] == "Participant") {
+                        ?>
+                        <a href="profile.php" class="btn btn-outline-dark me-2">Profile</a>
+                        <?php
+                    }
+                }
+                ?>
             </div>
-            <hr>
         </div>
+        <hr>
     </header>

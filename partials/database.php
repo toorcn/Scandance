@@ -60,9 +60,9 @@
     //     }
     //     else return false;
     // }
-    function newEvent($organizerID, $eventName, $eventEndTime, $eventCode) {
+    function newEvent($organizerID, $eventName, $currentTime, $eventEndTime, $eventCode) {
         global $conn;
-        $resultEvent = $conn->query("INSERT INTO events (Organizer_ID, Event_Name, Event_End, Event_Code) VALUES ('$organizerID', '$eventName', '$eventEndTime', '$eventCode')");
+        $resultEvent = $conn->query("INSERT INTO events (Organizer_ID, Event_Name, Event_Start, Event_End, Event_Code) VALUES ('$organizerID', '$eventName', '$currentTime', '$eventEndTime', '$eventCode')");
         $eventID = $conn->insert_id;
         $resultParti = $conn->query("INSERT INTO eventparticipants (Event_ID) VALUES ('$eventID')");
         if ($resultEvent === TRUE && $resultParti === TRUE) return true;
@@ -99,7 +99,7 @@
         $result = $conn->query("SELECT Event_ID FROM events WHERE Event_Code = '$eventCode'");
         if($result->num_rows > 0) { 
             $row = $result->fetch_assoc();
-            return $row;
+            return $row["Event_ID"];
         }
         else return false;
     } 
@@ -154,6 +154,7 @@
             $row = getParticipantInformation($this->participantID);
             return $row["Participant_Email"];
         }
+
         public function updateName($name) {
             global $conn;
             $result = $conn->query("UPDATE userparticipant SET Participant_Name = '$name' WHERE Participant_ID = $this->participantID");
@@ -188,6 +189,16 @@
             }
         }
         return $phoneArray;
+    }
+    function getParticipantEmailArrayByEventId($eventId) {
+        $emailArray = array();
+        foreach(json_decode(getParticipantByEventID($eventId)) as $key => $value) {
+            foreach($value as $timestamp => $participantId) {
+                $participant = new participant($participantId);
+                array_push($emailArray, $participant->getEmail());
+            }
+        }
+        return $emailArray;
     }
     function getParticipantIdArrayByEventId($eventId) {
         $idArray = array();
@@ -235,5 +246,26 @@
             return $row;
         }
         else return false;
+    }
+    function getCurrentEventByOrganizerId($organizerId) {
+        // TODO check if organizer has any events
+        global $conn;
+        $result = $conn->query("SELECT * FROM events WHERE Organizer_ID = '$organizerId' ORDER BY Event_ID DESC LIMIT 1");
+        if($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row;
+        } else {
+            if($result == "") return false;
+        }
+    }
+    function updateEventEndTime($eventId, $endTime) {
+        global $conn;
+        print_r($eventId);
+        print_r($endTime);
+        // print_r($endTime->format('Y-m-d H:i:s'));
+        // echo "UPDATE events SET Event_End = '$endTime' WHERE Event_ID = $eventId";
+        $result = $conn->query("UPDATE events SET Event_End = '$endTime' WHERE Event_ID = $eventId");
+
+        return $result;
     }
 ?>
