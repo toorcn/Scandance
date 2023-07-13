@@ -34,7 +34,7 @@ require('partials/headerForLogin.php');
         if(isset($_GET['qridentifier'])) {
             $qridentifier = $_GET['qridentifier'];
             // TODO redo condition
-            if(strlen($qridentifier) != 12) {
+            if(strlen($qridentifier) != 6) {
                 echo "<p>Invalid scan. Please try again!</p>";
                 exit();
             }

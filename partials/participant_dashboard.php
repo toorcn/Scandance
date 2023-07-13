@@ -16,13 +16,41 @@ if (!isset($_POST['eventCode'])) {
                     top: 45%; 
                     transform: translate(-50%, -50%);"
                 >
-                <div class="card" style="width: 400px;">
+                <div class="card borderRemoveOnMobile" style="width: 400px;">
                     <!-- Instacam Library -->
                     <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-                    <video class="card-img-top" id="preview" style="max-height: 500px;"></video>
+                    <video class="card-img-top" id="preview" style="max-height: 400px;"></video>
                     <div class="card-body" id="video-card">
-                        <h5 class="card-title">Scan Event QR</h5>
-                        <div class="card-text row mb-1" id="video-text"></div>
+                        <div 
+                            class="
+                                row 
+                                row-cols-auto
+                                g-3"
+                            >
+                            <h5 
+                                class="
+                                    card-title 
+                                    col-sm-8
+                                    col-12
+                                    text-center
+                                    align-self-center"
+                                >Scan Event QR
+                            </h5>
+                            <a 
+                                class="
+                                    col-sm-4
+                                    col-12
+                                    btn 
+                                    btn-outline-dark 
+                                    pt-2
+                                    pb-2
+                                    mb-1"
+                                id="startScan"
+                                data-active='0'
+                                >Begin scan</a>
+                            <!-- <div class="card-text row mb-1" id="video-text"></div> -->    
+                        </div>
+                        
                         <hr>
                         <form 
                             class="
@@ -30,7 +58,6 @@ if (!isset($_POST['eventCode'])) {
                                 row-cols-auto 
                                 g-3 
                                 align-items-center
-                                g-1 
                                 mt-1" 
                             action="scansuccess.php" 
                             method="GET"

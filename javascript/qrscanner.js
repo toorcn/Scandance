@@ -23,7 +23,18 @@ Instascan.Camera.getCameras().then(function (cameras) {
             scanner.start(cameras[cam]);
             // $("#video-text").html("<p class='card-text'>Camera " + (parseInt(cam)+1) + "</p>");
         });
-        scanner.start(cameras[1]);
+        $("#startScan").click(function() {
+            if($(this).attr("data-active") == 0) {
+                document.getElementById
+                scanner.start(cameras[1]);
+                $(this).attr("data-active", 1);
+                document.getElementById("startScan").innerHTML = "Stop Scan";
+            } else {
+                scanner.stop();
+                $(this).attr("data-active", 0);
+                document.getElementById("startScan").innerHTML = "Begin Scan";
+            }
+        });
     } else {
         console.error('No cameras found.');
     }

@@ -187,7 +187,7 @@ if (
     <!-- Organizer Event view -->
     <div class="row row-cols-auto align-items-center" style="width: 100vw; height: 87vh; align-items: center;">
         <div class="col-sm-6 col-12 text-center align-items-center" style="height: 87%;">
-            <div style="margin-top: 30%">
+            <div style="margin-top: 15%">
                 <div class="h2 text-muted"><?php echo $event_name ?></div>
                 <img src='<?php echo $qrCodeUrl ?>' alt='QR Code'>
                 <div>Event Code</div>
@@ -201,7 +201,7 @@ if (
                     DisplayFormat = "%%M%% minutes %%S%% seconds";
                     FinishMessage = "Event Expired";
                 </script>
-                <div><a href="clearQRSession.php" class="btn btn-outline-dark">Stop now</a></div>
+                <div><a href="clearQRSession.php" class="btn btn-outline-dark mt-1">Stop now</a></div>
 
             </div>
 
@@ -250,33 +250,38 @@ if (
                             if (!('error' in obj)) {
                                 if (obj.result != null) {
                                     let objResult = obj.result;
-                                    let html = `
+                                    if (objResult.idArray.length > 0) {
+                                        let html = `
                                                 <span class="row">
                                                     <span class="col h5 text-muted">Name</span>
                                                     <span class="col h5 text-muted">Email</span>
                                                     <span class="col h5 text-muted">Phone Number</span>
                                                     <span class="col h5 text-muted">Time Attended</span>
                                                 </span>
-                                            `;
-                                    const participantCount = objResult.idArray.length;
-
-                                    for (let i = 0; i < participantCount; i++) {
-                                        const participantId = objResult.idArray[i];
-                                        const timestamp = objResult.timestampArray[i];
-                                        const name = objResult.nameArray[i];
-                                        const email = objResult.emailArray[i];
-                                        const phone = objResult.phoneArray[i];
-                                        html += `
-                                                    <span class="row border-bottom text-center">
-                                                        <span class="col">${name}</span>
-                                                        <span class="col">${phone}</span>
-                                                        <span class="col">${timestamp}</span>
-                                                    </span>
                                                 `;
-                                        // html += "<p>(" + participantId + ") " + name + "[" + phone + "]- Scan time: " +  timestamp + "</p>";
+                                        const participantCount = objResult.idArray.length;
+
+                                        for (let i = 0; i < participantCount; i++) {
+                                            const participantId = objResult.idArray[i];
+                                            const timestamp = objResult.timestampArray[i];
+                                            const name = objResult.nameArray[i];
+                                            const email = objResult.emailArray[i];
+                                            const phone = objResult.phoneArray[i];
+                                            html += `
+                                                        <span class="row border-bottom text-center">
+                                                            <span class="col">${name}</span>
+                                                            <span class="col">${email}</span>
+                                                            <span class="col">${phone}</span>
+                                                            <span class="col">${timestamp}</span>
+                                                        </span>
+                                                    `;
+                                            // html += "<p>(" + participantId + ") " + name + "[" + phone + "]- Scan time: " +  timestamp + "</p>";
+                                        }
+                                        document.getElementById("liveAttendance").innerHTML = html;
+                                        document.getElementById("attendanceCount").innerHTML = participantCount;
+                                    } else {
+                                        document.getElementById("liveAttendance").innerHTML = "<p><i>No participants yet</i></p>";
                                     }
-                                    document.getElementById("liveAttendance").innerHTML = html;
-                                    document.getElementById("attendanceCount").innerHTML = participantCount;
                                 }
                             } else {
                                 console.log(obj.error);

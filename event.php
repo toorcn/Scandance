@@ -9,6 +9,7 @@ if(isset($_GET['eventID'])) {
     ?>
     <div class="container">
         <!-- TODO CHANGE EVERYTHING HERE -->
+        <a class="btn btn-outline-dark mb-5" href="dashboard.php">Back</a>
         <div class="row row-cols-auto">
             <div class="col-sm-6 col-12 mb-4">
                 <h1>Event Details</h1>
