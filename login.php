@@ -50,7 +50,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             type="email"
                             name="email"
                             required
-                            value="loaf@duck.com"
+                            value="<?php echo $env['ACCOUNT_FILLER_EMAIL']; ?>"
                             style="border-top-left-radius: 0; 
                                 border-top-right-radius: 0;" 
                             >
@@ -63,7 +63,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             type="password"
                             name="password"
                             required
-                            value="123456" 
+                            value="<?php echo $env['ACCOUNT_FILLER_PASSWORD']; ?>" 
                             >
                         <label for="password">Password</label>    
                     </div>
@@ -84,7 +84,8 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                                     header("Location: dashboard.php");
                                 } else {
                                     // login failed 
-                                    echo "<p>An unexpected error ocurred. Try again later.</p>";
+                                    echo "<p>Incorrect password.</p>";
+                                    // echo "<p>An unexpected error ocurred. Try again later.</p>";
                                 }
                             } else {
                                 // User not registered

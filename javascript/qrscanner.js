@@ -1,4 +1,9 @@
-let scanner = new Instascan.Scanner({ video: document.getElementById('preview'), mirror: false, backgroundScan: false });
+let scanner = new Instascan.Scanner({ 
+    video: document.getElementById('preview'), 
+    mirror: false, 
+    backgroundScan: false,
+    scanPeriod: 5
+    });
 scanner.addListener('scan', function (content) {
     // QR Code scanned
     // post to scansucess.php
@@ -9,35 +14,35 @@ scanner.addListener('scan', function (content) {
     // header("Location: scansuccess.php?eventCode=" + eventCode);
     console.log(content);
 });
-Instascan.Camera.getCameras().then(function (cameras) {
-    if (cameras.length > 0) {
-        for (let i = 0; i < cameras.length; i++) {
-            // add camera switches
-            $("#video-text").append("<a href='#' class='camera-switches btn btn-outline-dark p-1 m-1 col' data-cam='"+i+"'>Camera " + (i+1) + "</a>");
-            // document.getElementById("video-card").innerHTML += 
-            // "<a href='#' class='camera-switches btn btn-outline-dark p-1 m-1' data-cam='"+i+"'>Camera " + (i+1) + "</a>";
-        }
-        // when clicked start scanner of that camera
-        $(".camera-switches").click(function() {
-            let cam = $(this).attr("data-cam");
-            scanner.start(cameras[cam]);
-            // $("#video-text").html("<p class='card-text'>Camera " + (parseInt(cam)+1) + "</p>");
-        });
-        $("#startScan").click(function() {
-            if($(this).attr("data-active") == 0) {
-                document.getElementById
-                scanner.start(cameras[1]);
-                $(this).attr("data-active", 1);
-                document.getElementById("startScan").innerHTML = "Stop Scan";
+$("#startScan").click(function() {
+    if($(this).attr("data-active") == 0) {
+        $(this).attr("data-active", 1);
+        document.getElementById("startScan").innerHTML = "Stop Scan"; 
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                let camActivated = false;
+                for (let i = 0; i < cameras.length; i++) {
+                    const cameraName = cameras[i]['name'];
+                    if (cameraName.includes("back")) {
+                        scanner.start(cameras[i]);
+                        camActivated = true;
+                        break;
+                    }
+                }
+                if (camActivated == false) {
+                    scanner.start(cameras[0]);
+                }
             } else {
-                scanner.stop();
-                $(this).attr("data-active", 0);
-                document.getElementById("startScan").innerHTML = "Begin Scan";
+                console.error('No cameras found.');
             }
-        });
+        }).catch(function (e) {
+            console.error(e);
+        });    
     } else {
-        console.error('No cameras found.');
+        scanner.stop();
+        $(this).attr("data-active", 0);
+        document.getElementById("startScan").innerHTML = "Begin Scan";
+
+        $("#video-text").html("");
     }
-}).catch(function (e) {
-    console.error(e);
 });

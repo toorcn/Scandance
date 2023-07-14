@@ -52,7 +52,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             type="email"
                             name="email"
                             required
-                            value="loaf@duck.com"
+                            value="<?php echo $env['ACCOUNT_FILLER_EMAIL']; ?>"
                             style="border-top-left-radius: 0; 
                                 border-top-right-radius: 0;" 
                             >
@@ -65,7 +65,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             type="password"
                             name="password"
                             required
-                            value="123456" 
+                            value="<?php echo $env['ACCOUNT_FILLER_PASSWORD']; ?>" 
                             >
                         <label for="password">Password</label>    
                         <div id="passwordError" class="form-text" hidden>Password must contain at least 8 characters</div>
@@ -77,7 +77,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             type="password"
                             name="passwordConfirm"
                             required
-                            value="123456"
+                            value="<?php echo $env['ACCOUNT_FILLER_PASSWORD']; ?>"
                             >
                         <label for="passwordConfirm">Repeat password</label>  
                         <div id="passwordConfirmError" class="form-text" hidden>Passwords do not match</div>
@@ -150,11 +150,11 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                         // if (password != passwordConfirm) {
                         //     $('#submitErrorResponseBox').html("<p>Passwords do not match!</p>");
                         // } else {
-                            if($('#passwordError').attr('hidden') == undefined && $('#passwordConfirmError').attr('hidden') == undefined) {
-                                $('#registerForm').submit();
-                            } else {
-                                $('#submitErrorResponseBox').html("<p>Please check your password!</p>");
-                            }
+                        if($('#passwordError').attr('hidden') && $('#passwordConfirmError').attr('hidden')) {
+                            $('#registerForm').submit();
+                        } else {
+                            $('#submitErrorResponseBox').html("<p>Please check your password!</p>");
+                        }
                         // }
                     });
                 </script>

@@ -52,6 +52,16 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
         <?php
     }
     if($role == "Participant") {
+        if ($env['FORCE_USER_FILL_PROFILE'] == true) {
+            if (
+                // Either one of these is true
+                $participant->getName() == NULL
+             && $participant->getPhone() == NULL
+                ) {
+                // Participant Profile View
+                header("Location: profile.php?firstTime=true");
+            }          
+        }
         // Participant Dashboard View
         require('partials/participant_dashboard.php');
     }

@@ -45,9 +45,9 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
                             <!-- TODO duration present update to better interactions -->
                             <div class="form-group row mb-2 px-2">
                                 <label for="event_duration" class="col-sm-4 col-form-label">Duration Presents</label>
-                                <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(1)">1</button>
-                                <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(15)">15</button>
+                                <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(10)">10</button>
                                 <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(30)">30</button>
+                                <button type="button" class="btn btn-outline-light text-black col" onclick="updateEventDuration(60)">60</button>
                             </div>
                             <script>
                                 function updateEventDuration(duration) {
@@ -178,7 +178,7 @@ if (
     // echo "editted Countdown time: '" . $endTimeCountdown . "'<br>";
 
     // $qrIdentifier = $event_organizerID . ":" . $event_name . ":" . $event_code;
-    $localIP = '192.168.1.102/s4webdevgroup';
+    $localIP = $env['QR_DOMAIN'];
     $qrIdentifier = 'https://' . $localIP . '/?qridentifier=' . $event_code;
     $qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=$qrIdentifier";
 

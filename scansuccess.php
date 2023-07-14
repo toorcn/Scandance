@@ -9,7 +9,7 @@ require('partials/headerForLogin.php');
     function joinEvent($userID, $eventID, $eventCode) {
         $event = getEventByEventCode($eventCode);
         if ($event == null) {
-            echo "<p>Invalid event code. Please try again!</p>";
+            echo "<p>Event can't be found. Please try again!</p>";
             exit();
         }
         $event_name = $event["Event_Name"];
@@ -17,8 +17,13 @@ require('partials/headerForLogin.php');
             echo "<p>You have already joined this event.</p>";
             exit();
         } else {
-            participantJoinEvent($userID, $eventID);
-            echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";
+            if (hasEventEnded($eventID)) {
+                echo "<p>Event has ended.</p>";
+            } else {
+                participantJoinEvent($userID, $eventID);
+                echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";    
+            }
+            
         }
     }
     if($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -34,10 +39,10 @@ require('partials/headerForLogin.php');
         if(isset($_GET['qridentifier'])) {
             $qridentifier = $_GET['qridentifier'];
             // TODO redo condition
-            if(strlen($qridentifier) != 6) {
-                echo "<p>Invalid scan. Please try again!</p>";
-                exit();
-            }
+            // if(strlen($qridentifier) != 6) {
+            //     echo "<p>Event can't be found. Please try again!</p>";
+            //     exit();
+            // }
             // parse event_code
             $event_code = substr($qridentifier, -6);
             $event = getEventByEventCode($event_code);

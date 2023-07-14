@@ -9,13 +9,23 @@ if ($_SESSION["role"] == "Participant") {
     $participant = new participant($userID);
     ?>
     <div class="container">
-        <a 
-            class="btn 
-                btn-outline-dark 
-                mb-5"
-            href="dashboard.php">
-            Back
-        </a>
+        <?php
+        if (isset($_GET['firstTime']) && $_GET['firstTime']) {
+            ?>
+            <p class='font-monospace'>Please fill in your information before proceeding.</p>
+            <?php
+        } else {
+            ?>
+            <a 
+                class="btn 
+                    btn-outline-dark 
+                    mb-5"
+                href="dashboard.php">
+                Back
+            </a>  
+            <?php          
+        }
+        ?>
         <div class="card-body" id="video-card">
             <h3 class="card-title">User information</h3>
             <form class="text-center mt-1" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -69,6 +79,9 @@ if ($_SESSION["role"] == "Participant") {
                             $participant->updatePhone($userPhone)
                         ) {
                             echo "<p>Information Updated!</p>";
+                            if (isset($_GET['firstTime']) && $_GET['firstTime']) {
+                                header("Location: dashboard.php");
+                            }
                         } else {
                             echo "<p>Error updating info. Try again later.</p>";
                         }

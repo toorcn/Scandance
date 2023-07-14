@@ -19,7 +19,7 @@ if (!isset($_POST['eventCode'])) {
                 <div class="card borderRemoveOnMobile" style="width: 400px;">
                     <!-- Instacam Library -->
                     <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-                    <video class="card-img-top" id="preview" style="max-height: 400px;"></video>
+                    <video class="card-img-top" id="preview" style="max-height: 200px;"></video>
                     <div class="card-body" id="video-card">
                         <div 
                             class="
@@ -87,7 +87,6 @@ if (!isset($_POST['eventCode'])) {
                                     placeholder="Enter event code"
                                     required
                                     >
-                                <!-- <label for="input_event_code">Event Code</label> -->
                             </div>
                             <input 
                                 class="

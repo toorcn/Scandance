@@ -1,8 +1,9 @@
-<?php    
-    $dbservername = "localhost";
-    $dbusername = "root";
-    $dbpassword = "";
-    $dbname = "Scandance";
+<?php  
+    $env = parse_ini_file('.env');
+    $dbservername = $env['DB_SERVER_NAME'];
+    $dbusername = $env['DB_USER_NAME'];
+    $dbpassword = $env['DB_PASSWORD'];
+    $dbname = $env['DB_NAME'];
     // TODO https://www.w3schools.com/php/func_mysqli_close.asp
     // Create connection
     $conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
@@ -10,6 +11,7 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
+    // TODO CLOSE CONNECTION
     function userExist($role, $email) {
         $rID = $role . "_ID";
         $rTable = "user" . strtolower($role);
@@ -24,8 +26,9 @@
         $rTable = "user" . strtolower($role);
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         global $conn;
-        $result = $conn->query("INSERT INTO $rTable ($rEmail, $rPassword) VALUES ('$email', '$password')");
+        $result = $conn->query("INSERT INTO $rTable ($rEmail, $rPassword) VALUES ('$email', '$hashed_password')");
         if ($result === TRUE) return true;
         else return false;
     }
@@ -35,9 +38,17 @@
         $rEmail = $role . "_Email";
         $rPassword = $role . "_Password";
         global $conn;
-        $result = $conn->query("SELECT $rEmail, $rPassword FROM $rTable WHERE $rEmail = '$email' AND $rPassword = '$password'");
-        if ($result->num_rows == 1) return true;
-        else return false;
+        $result = $conn->query("SELECT $rPassword FROM $rTable WHERE $rEmail = '$email'");
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            $hashed_password = $row[$rPassword];
+            if (password_verify($password, $hashed_password)) return true;
+        } 
+        return false;
+        // global $conn;
+        // $result = $conn->query("SELECT $rEmail, $rPassword FROM $rTable WHERE $rEmail = '$email' AND $rPassword = '$password'");
+        // if ($result->num_rows == 1) return true;
+        // else return false;
     }
     function getIdByEmail($email, $role) {
         $rID = $role . "_ID";
@@ -68,6 +79,14 @@
         if ($resultEvent === TRUE && $resultParti === TRUE) return true;
         else return false;
     } 
+    function hasEventEnded($eventID) {
+        $event = getEventByEventID($eventID);
+        $eventEndTime = $event["Event_End"];
+        $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Singapore')); 
+        $currentDateTime = $currentDateTime->format('Y-m-d H:i:s');
+        if ($currentDateTime > $eventEndTime) return true;
+        else return false;
+    }
     function participantJoinEvent($participantID, $eventID) {
         $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Singapore')); 
         $joinTimeSQL = $currentDateTime->format('Y-m-d H:i:s');
@@ -260,8 +279,8 @@
     }
     function updateEventEndTime($eventId, $endTime) {
         global $conn;
-        print_r($eventId);
-        print_r($endTime);
+        // print_r($eventId);
+        // print_r($endTime);
         // print_r($endTime->format('Y-m-d H:i:s'));
         // echo "UPDATE events SET Event_End = '$endTime' WHERE Event_ID = $eventId";
         $result = $conn->query("UPDATE events SET Event_End = '$endTime' WHERE Event_ID = $eventId");
