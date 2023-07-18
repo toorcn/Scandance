@@ -25,8 +25,6 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
         ?>
         <!-- Organizer dashboard -->
         <div class="container">
-<!-- TEMP MARKER -->
-            <!-- <section id="new"> -->
         <div class="position-relative" style="width: 100%; height: 85vh;">
             <div class="position-absolute text-center" style="left: 50%; top: 40%; transform: translate(-50%, -50%);">
                 <div class="card sm" id="signInCard">
@@ -128,10 +126,7 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
                     <!-- </form>
                 </div> -->
             <!-- </section> -->
-<!-- TEMP MARKER             -->
-            
         </div>
-
     <?php
 
     }
@@ -155,7 +150,7 @@ if (!(isset($_POST['event_name']) && isset($_POST['event_duration']))) {
         $_SESSION['endTimeSQL'] = $endTimeSQL;
         $_SESSION['event_organizerID'] = $event_organizerID;
         $_SESSION['event_code'] = $event_code;
-        newEvent($event_organizerID, $event_name, $currentDateTimeSQL, $endTimeSQL, $event_code);
+        createEvent($event_organizerID, $event_name, $currentDateTimeSQL, $endTimeSQL, $event_code);
     }
 }
 if (

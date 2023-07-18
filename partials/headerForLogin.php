@@ -37,7 +37,7 @@ session_start();
                         text-decoration-none 
                         link-dark" 
                 id="scandanceNavTitle"        
-                href="/s4webdevgroup"
+                href="./"
                 >
                 <p>Scandance<sup>&copy</sup></p>
             </a>

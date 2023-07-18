@@ -39,6 +39,9 @@ if ($_SESSION["role"] == "Participant") {
                         id="userName" 
                         type="text" 
                         name="userName" 
+                        pattern="[a-zA-Z0-9\s]+"
+                        oninvalid="this.setCustomValidity('Please enter only alphanumeric characters.')"
+                        oninput="this.setCustomValidity('')"
                         value="<?php 
                             if (isset($_POST['userName'])) {
                                 echo $_POST['userName'];

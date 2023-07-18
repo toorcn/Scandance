@@ -51,6 +51,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             id="email" 
                             type="email"
                             name="email"
+                            placeholder="Email"
                             required
                             value="<?php echo $env['ACCOUNT_FILLER_EMAIL']; ?>"
                             style="border-top-left-radius: 0; 
@@ -64,6 +65,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             id="password" 
                             type="password"
                             name="password"
+                            placeholder="Password"
                             required
                             value="<?php echo $env['ACCOUNT_FILLER_PASSWORD']; ?>" 
                             >
@@ -76,6 +78,7 @@ if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: d
                             id="passwordConfirm" 
                             type="password"
                             name="passwordConfirm"
+                            placeholder="Repeat password"
                             required
                             value="<?php echo $env['ACCOUNT_FILLER_PASSWORD']; ?>"
                             >
