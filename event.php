@@ -1,6 +1,6 @@
 <?php // [MAJOR-CHANGES-NEEDED 13/7/23]
 require('partials/database.php');
-require('partials/headerForLogin.php');
+require('partials/header.php');
 
 if(isset($_GET['eventID'])) {
     $event_id = $_GET['eventID'];
@@ -45,9 +45,10 @@ if(isset($_GET['eventID'])) {
                 } else {
                     ?>
                     <div class="pt-3 px-2 row">
-                        <span class="col-6 col-md-4 h5 text-muted">Name</span>
-                        <span class="col-4 d-none d-md-block h5 text-muted">Phone Number</span>
-                        <span class="col-6 col-md-4 h5 text-muted">Email</span>
+                        <span class="col-6 col-md-3 h5 text-muted">Name</span>
+                        <span class="col-3 d-none d-md-block h5 text-muted">Phone Number</span>
+                        <span class="col-3 d-none d-md-block h5 text-muted">Email</span>
+                        <span class="col-6 col-md-3 h5 text-muted">Timestamp</span>
                     </div>
                     <div class="pt-3 px-2 row"> 
                     <?php
@@ -56,6 +57,7 @@ if(isset($_GET['eventID'])) {
                     foreach($eventParticipants as $participant) {
                         $counter++;
                         $participantID = array_values($participant)[0];
+                        $participantTimestamp = array_keys($participant)[0];
                         $participant = new participant($participantID);
                         $participantName = $participant->getName();
                         $participantPhone = $participant->getPhone();
@@ -64,9 +66,10 @@ if(isset($_GET['eventID'])) {
                         <div class="card mb-2">
                             <div class="card-body">
                                 <span class="row text-center">
-                                    <span class="col-6 col-md-4"><?php echo $participantName ?></span>
-                                    <span class="col-4 d-none d-md-block"><?php echo $participantPhone ?></span>
-                                    <span class="col-6 col-md-4"><?php echo $participantEmail ?></span>
+                                    <span class="col-6 col-md-3"><?php echo $participantName ?></span>
+                                    <span class="col-3 d-none d-md-block"><?php echo $participantPhone ?></span>
+                                    <span class="col-3 d-none d-md-block"><?php echo $participantEmail ?></span>
+                                    <span class="col-6 col-md-3"><?php echo $participantTimestamp ?></span>
                                 </span>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 <?php // [CONTENT-NEEDED 13/7/23]
-require('partials/headerForLogin.php');
+require('partials/header.php');
 // Redirect to dashboard if already logged in
 if (isset($_SESSION['valid']) && $_SESSION['valid'] == true) header("Location: dashboard.php");
 ?>

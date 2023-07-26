@@ -11,12 +11,13 @@ $eventParticipants = getParticipantByEventID($event_id);
 $eventParticipants = json_decode($eventParticipants, true);
 foreach($eventParticipants as $participant) {
     $participantID = array_values($participant)[0];
+    $participantTimestamp = array_keys($participant)[0];
     $participant = new participant($participantID);
     $participantName = $participant->getName();
     $participantPhone = $participant->getPhone();
     $participantEmail = $participant->getEmail();
     // for csv
-    $listForCSV[] = array($participantID, $participantName, $participantPhone, $participantEmail);
+    $listForCSV[] = array($participantID, $participantName, $participantPhone, $participantEmail, $participantTimestamp);
     // 
 }
 // End of Create the Array
@@ -25,7 +26,7 @@ foreach($eventParticipants as $participant) {
 $filename = "export.csv";
 $filenameClient = "Scandance_" . $event_name . "_" . date("Y-m-d") . ".csv";
 $output = fopen($filename, "w");  
-fputcsv($output, array('ID', 'Name', 'Phone', 'Email')); 
+fputcsv($output, array('Num.', 'Name', 'Phone Number', 'Email', 'Timestamp')); 
 
 foreach($listForCSV as $row) {  
     fputcsv($output, $row);  

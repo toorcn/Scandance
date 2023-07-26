@@ -1,6 +1,6 @@
 <?php // [MINOR-CHANGES-WANTED 13/7/23]
 require('partials/database.php');
-require('partials/headerForLogin.php');
+require('partials/header.php');
 
 if ($_SESSION["role"] == "Participant") {
     $email = $_SESSION['email'];

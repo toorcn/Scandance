@@ -258,7 +258,9 @@ if (
 
                                         for (let i = 0; i < participantCount; i++) {
                                             const participantId = objResult.idArray[i];
-                                            const timestamp = objResult.timestampArray[i];
+                                            const timestamp = objResult.timestampArray[i]
+                                                ? (objResult.timestampArray[i]).substr(11)
+                                                : "Unknown";
                                             const name = objResult.nameArray[i] == null 
                                                 || objResult.nameArray[i] == "" 
                                                 ? "Unknown" 

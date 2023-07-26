@@ -6,12 +6,8 @@ let scanner = new Instascan.Scanner({
     });
 scanner.addListener('scan', function (content) {
     // QR Code scanned
-    // post to scansucess.php
     let eventCode = content;
-    // header("Location: scansuccess.php?qridentifier=$event_code");
-
     window.location.href = "scansuccess.php?qridentifier=" + eventCode;
-    // header("Location: scansuccess.php?eventCode=" + eventCode);
     console.log(content);
 });
 $("#startScan").click(function() {

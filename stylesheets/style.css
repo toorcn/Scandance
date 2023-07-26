@@ -56,18 +56,6 @@ body {
     margin: 1vh auto;
     display: block;
 }
-.eventHistoryItems {
-    /* border: 1px solid black; */
-}
-.eventHistoryItems > a, .eventHistoryItems > a > div, .eventHistoryItems > div > a  {
-    text-decoration: none;
-    /* color: #43334d; */
-    /* border-top: 1px solid #43334d; */
-    border-bottom: 1px solid #43334d;
-    padding: 0.5vh 0;
-    /* display: block; */
-    border-radius: 6px;
-}
 #preview {
     max-width: 100%;
     max-height: 50vh;

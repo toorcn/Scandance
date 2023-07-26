@@ -1,6 +1,6 @@
 <?php // [MAJOR-CHANGES-NEEDED 13/7/23]
 require('partials/database.php');
-require('partials/headerForLogin.php');
+require('partials/header.php');
 ?>
 <div class="container">
     <a class="btn btn-outline-dark mb-4" href="dashboard.php">Back</a>
