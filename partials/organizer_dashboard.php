@@ -180,7 +180,7 @@ if (
     $event_id = getEventIdByEventCode($event_code);
     ?>
     <!-- Organizer Event view -->
-    <div class="row row-cols-auto align-items-center" style="width: 100vw; height: 87vh; align-items: center;">
+    <div class="row row-cols-auto align-items-center m-0" style="width: 100vw; height: 87vh; align-items: center;">
         <div class="col-sm-6 col-12 text-center align-items-center" style="height: 87%;">
             <div style="margin-top: 15%">
                 <div class="h2 text-muted"><?php echo $event_name ?></div>
@@ -248,10 +248,10 @@ if (
                                     if (objResult.idArray.length > 0) {
                                         let html = `
                                                 <span class="row">
-                                                    <span class="col h5 text-muted">Name</span>
-                                                    <span class="col h5 text-muted">Email</span>
-                                                    <span class="col h5 text-muted">Phone Number</span>
-                                                    <span class="col h5 text-muted">Time Attended</span>
+                                                    <span class="col-6 col-md-3 h5 text-muted">Name</span>
+                                                    <span class="col-3 d-none d-md-block h5 text-muted">Phone Number</span>
+                                                    <span class="col-3 d-none d-md-block h5 text-muted">Email</span>
+                                                    <span class="col-6 col-md-3 h5 text-muted">Time Attended</span>
                                                 </span>
                                                 `;
                                         const participantCount = objResult.idArray.length;
@@ -259,16 +259,29 @@ if (
                                         for (let i = 0; i < participantCount; i++) {
                                             const participantId = objResult.idArray[i];
                                             const timestamp = objResult.timestampArray[i];
-                                            const name = objResult.nameArray[i];
-                                            const email = objResult.emailArray[i];
-                                            const phone = objResult.phoneArray[i];
+                                            const name = objResult.nameArray[i] == null 
+                                                || objResult.nameArray[i] == "" 
+                                                ? "Unknown" 
+                                                : objResult.nameArray[i];
+                                            const email = objResult.emailArray[i] == null 
+                                                || objResult.emailArray[i] == "" 
+                                                ? "Unknown" 
+                                                : objResult.emailArray[i];
+                                            const phone = objResult.phoneArray[i] == null 
+                                                || objResult.phoneArray[i] == "" 
+                                                ? "Unknown" 
+                                                : objResult.phoneArray[i];
                                             html += `
-                                                        <span class="row border-bottom text-center">
-                                                            <span class="col">${name}</span>
-                                                            <span class="col">${email}</span>
-                                                            <span class="col">${phone}</span>
-                                                            <span class="col">${timestamp}</span>
+                                                <div class="card mb-2">
+                                                    <div class="card-body">
+                                                        <span class="row text-center">
+                                                            <span class="col-6 col-md-3">${name}</span>
+                                                            <span class="col-3 d-none d-md-block">${email}</span>
+                                                            <span class="col-3 d-none d-md-block">${phone}</span>
+                                                            <span class="col-6 col-md-3">${timestamp}</span>
                                                         </span>
+                                                    </div>
+                                                </div>
                                                     `;
                                             // html += "<p>(" + participantId + ") " + name + "[" + phone + "]- Scan time: " +  timestamp + "</p>";
                                         }

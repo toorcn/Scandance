@@ -36,32 +36,36 @@ if ($_SESSION["role"] == "Organizer") {
             }
         </script>
         <div class="text-center mt-2">
-            <div class="card borderRemoveOnMobile" style="width: 100%;">
+            <div class=" borderRemoveOnMobile" style="width: 100%;">
                 <h5 class="card-title p-3">Event History</h5>
                 <!-- <p class="card-text" id="video-text">Camera 1</p> -->
                 <!-- TODO styling and display -->
                 <?php
                 $eventHistory = getEventsByOrganizerId($userID);
                 if ($eventHistory != false) {
-                    foreach ($eventHistory as $event) {
+                    foreach ($eventHistory as $loopIndex => $event) {
                         $participant = json_decode(getParticipantByEventID($event["Event_ID"]));
                         if ($participant == NULL) {
                             $participant = 0;
                         } else {
-                            // print_r($participant);
                             $participant = count($participant);
                         }
                         ?>
-                        <p class="eventHistoryItems">
-                            <a href="event.php?eventID=<?php echo $event["Event_ID"] ?>">
-                                <?php echo $event["Event_ID"] ?>. <?php echo $event["Event_Name"] ?> <!-- [<?php echo $event["Event_End"] ?>] -->
-                                    [<?php echo $participant ?> Joined]
-                            </a>
-                        </p>
+                        <a href="event.php?eventID=<?php echo $event["Event_ID"] ?>" class="card mb-2" style="text-decoration:none;">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-weight: bold; font-size: 1.2rem;">
+                                    <?php echo $loopIndex + 1 ?>. <?php echo $event["Event_Name"] ?>
+                                </h5>
+                                <p class="card-text" style="font-size: 1rem;">
+                                    <?php echo $participant ?> Joined
+                                </p>
+                            </div>
+                        </a>
                         <?php
                     }
-                } else {
-                    echo "<p><i>No events history found</i></p>";
+                    if (empty($eventHistory)) {
+                        echo "<p><i>No events history found</i></p>";
+                    }
                 }
                 ?>
             </div>

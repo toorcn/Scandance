@@ -26,7 +26,8 @@ session_start();
         class="container 
                 p-2 
                 rounded-4 
-                rounded-top-0"
+                rounded-top-0
+                "
         >
         <div 
             class="align-items-center" 
