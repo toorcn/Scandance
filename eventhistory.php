@@ -1,4 +1,4 @@
-<?php // [MAJOR-CHANGES-NEEDED 13/7/23]
+<?php
 require('partials/database.php');
 require('partials/header.php');
 
@@ -12,7 +12,7 @@ if ($_SESSION["role"] == "Organizer") {
     <div class="container">
         <a class="btn btn-outline-dark mb-5" href="dashboard.php">Back</a>
         <!-- up button -->
-        <button class="btn btn-outline-dark" onclick="topFunction()" id="scrollBackUp" title="Go to top" style="display: none;">^</button>
+        <button class="btn btn-outline-dark" onclick="topFunction()" id="scrollBackUp" title="Go to top" style="display: none; z-index: 10;">^</button>
         <script>
             //Get the button
             var scrollBackUp = document.getElementById("scrollBackUp");
@@ -38,8 +38,6 @@ if ($_SESSION["role"] == "Organizer") {
         <div class="text-center mt-2">
             <div class=" borderRemoveOnMobile" style="width: 100%;">
                 <h5 class="card-title p-3">Event History</h5>
-                <!-- <p class="card-text" id="video-text">Camera 1</p> -->
-                <!-- TODO styling and display -->
                 <?php
                 $eventHistory = getEventsByOrganizerId($userID);
                 if ($eventHistory != false) {
@@ -63,9 +61,9 @@ if ($_SESSION["role"] == "Organizer") {
                         </a>
                         <?php
                     }
-                    if (empty($eventHistory)) {
-                        echo "<p><i>No events history found</i></p>";
-                    }
+                }
+                if (empty($eventHistory)) {
+                    echo "<p><i>No events history found</i></p>";
                 }
                 ?>
             </div>
@@ -73,4 +71,5 @@ if ($_SESSION["role"] == "Organizer") {
     </div>
     <?php
 }  
+require('partials/footer.php');
 ?>

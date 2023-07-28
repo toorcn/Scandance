@@ -1,31 +1,41 @@
-<?php // [MAJOR-CHANGES-NEEDED 13/7/23]
+<?php
 require('partials/database.php');
 require('partials/header.php');
 ?>
 <div class="container">
     <a class="btn btn-outline-dark mb-4" href="dashboard.php">Back</a>
     <?php
-    // TODO presentation of text/response
+    // Function to display success message
+    function displaySuccessMessage($message) {
+        echo "<div class='alert alert-success' role='alert'>$message</div>";
+    }
+
+    // Function to display error message
+    function displayErrorMessage($message) {
+        echo "<div class='alert alert-danger' role='alert'>$message</div>";
+    }
+
+    // Join event function
     function joinEvent($userID, $eventID, $eventCode) {
         $event = getEventByEventCode($eventCode);
         if ($event == null) {
-            echo "<p>Event can't be found. Please try again!</p>";
+            displayErrorMessage("Event can't be found. Please try again!");
             exit();
         }
         $event_name = $event["Event_Name"];
         if(hasJoinedEvent($userID, $eventID)) {
-            echo "<p>You have already joined this event.</p>";
+            displayErrorMessage("You have already joined this event.");
             exit();
         } else {
             if (hasEventEnded($eventID)) {
-                echo "<p>Event has ended.</p>";
+                displayErrorMessage("Event has ended.");
             } else {
                 participantJoinEvent($userID, $eventID);
-                echo "<p>Thank you for joining <strong>$event_name</strong>!</p>";    
+                displaySuccessMessage("Thank you for joining <strong>$event_name</strong>!");
             }
-            
         }
     }
+
     if($_SERVER['REQUEST_METHOD'] === 'GET') {
         $email = $_SESSION['email'];
         $role = $_SESSION['role'];
@@ -38,11 +48,11 @@ require('partials/header.php');
         }
         if(isset($_GET['qridentifier'])) {
             $qridentifier = $_GET['qridentifier'];
-            // TODO redo condition
-            // if(strlen($qridentifier) != 6) {
-            //     echo "<p>Event can't be found. Please try again!</p>";
-            //     exit();
-            // }
+            
+            if(strlen($qridentifier) != 6) {
+                displayErrorMessage("Event can't be found. Please try again!");
+                exit();
+            }
             // parse event_code
             $event_code = substr($qridentifier, -6);
             $event = getEventByEventCode($event_code);

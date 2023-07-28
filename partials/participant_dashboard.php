@@ -1,8 +1,7 @@
-<?php // [MINOR-CHANGES-WANTED 13/7/23]
+<?php
 if (!isset($_POST['eventCode'])) {
     ?>
     <div class="container">
-        <!-- TODO CHECK  -->
         <div 
             class="" 
             style="
@@ -101,8 +100,6 @@ if (!isset($_POST['eventCode'])) {
                                 >
                         </form>
                     </div>
-
-                    <script type="text/javascript" src="./javascript/qrscanner.js"></script> 
                 </div>
             </div>
         </div>

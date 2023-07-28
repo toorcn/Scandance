@@ -1,4 +1,4 @@
-<?php // [MAJOR-CHANGES-NEEDED 13/7/23]
+<?php
 require('partials/database.php');
 require('partials/header.php');
 
@@ -86,4 +86,5 @@ if(isset($_GET['eventID'])) {
     </div>
     <?php
 } 
+require('partials/footer.php');
 ?>

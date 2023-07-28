@@ -13,22 +13,26 @@ if(isset($_SESSION['valid']) && $_SESSION['valid'] == true) {
         require('partials/organizer_dashboard.php'); 
         ?>
         <!-- Countdown JS -->
-        <script type="text/javascript" src="./javascript/countdown.js"></script>        
+        <script type="text/javascript" src="./javascript/countdown.js?"></script>        
         <?php
     }
     if($role == "Participant") {
+        // Check if user has filled profile
         if ($env['FORCE_USER_FILL_PROFILE'] == true) {
             if (
-                // Either one of these is true
                 $participant->getName() == NULL
              && $participant->getPhone() == NULL
-                ) {
+            ) {
                 // Participant Profile View
                 header("Location: profile.php?firstTime=true");
             }          
         }
         // Participant Dashboard View
         require('partials/participant_dashboard.php');
+        ?>
+        <!-- Instacam Library -->
+        <script type="text/javascript" src="./javascript/qrscanner.js?"></script> 
+        <?php
     }
 } else {
     // Redirect to login page

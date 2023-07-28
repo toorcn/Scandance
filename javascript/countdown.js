@@ -36,7 +36,9 @@ function CountBack(secs) {
         return;
     }
     DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs, 86400, 100000));
-    DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs, 3600, 24));
+    DisplayStr = calcage(secs, 3600, 24) == "<b>00</b>"
+        ? DisplayStr.replace(/%%H%% hours/g, "") 
+        : DisplayStr.replace(/%%H%%/g, calcage(secs, 3600, 24));
     DisplayStr = DisplayStr.replace(/%%M%%/g, calcage(secs, 60, 60));
     DisplayStr = DisplayStr.replace(/%%S%%/g, calcage(secs, 1, 60));
 

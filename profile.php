@@ -1,6 +1,7 @@
-<?php // [MINOR-CHANGES-WANTED 13/7/23]
+<?php
 require('partials/database.php');
 require('partials/header.php');
+ob_start();
 
 if ($_SESSION["role"] == "Participant") {
     $email = $_SESSION['email'];
@@ -10,8 +11,11 @@ if ($_SESSION["role"] == "Participant") {
     ?>
     <div class="container">
         <?php
+        $formAction = $_SERVER['PHP_SELF'];
         if (isset($_GET['firstTime']) && $_GET['firstTime']) {
+            $formAction .= "?firstTime=true";
             ?>
+            <h1 class="text-center">Welcome to Scandance!</h1>
             <p class='font-monospace'>Please fill in your information before proceeding.</p>
             <?php
         } else {
@@ -27,8 +31,8 @@ if ($_SESSION["role"] == "Participant") {
         }
         ?>
         <div class="card-body" id="video-card">
-            <h3 class="card-title">User information</h3>
-            <form class="text-center mt-1" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+            <h3 class="card-title">Account information</h3>
+            <form class="text-center mt-1" action="<?php echo $formAction ?>" method="post">
                 <div 
                     class="form-group 
                         mb-3 
@@ -39,6 +43,7 @@ if ($_SESSION["role"] == "Participant") {
                         id="userName" 
                         type="text" 
                         name="userName" 
+                        placeholder="Name"
                         pattern="[a-zA-Z0-9\s]+"
                         oninvalid="this.setCustomValidity('Please enter only alphanumeric characters.')"
                         oninput="this.setCustomValidity('')"
@@ -62,6 +67,7 @@ if ($_SESSION["role"] == "Participant") {
                         id="userPhone" 
                         type="number" 
                         name="userPhone"
+                        placeholder="Phone"
                         value="<?php
                             if (isset($_POST['userPhone'])) {
                                 echo $_POST['userPhone'];
@@ -91,11 +97,12 @@ if ($_SESSION["role"] == "Participant") {
                     }
                     ?>
                 </div>
-                <input class="btn btn-outline-dark" type="submit"  value="Update">
+                <input class="btn btn-outline-dark" type="submit"  value="<?php echo (isset($_GET['firstTime']) && $_GET['firstTime']) ? "Next" : "Update" ?>">
             </form>
         </div>
         <a class="btn btn-outline-dark mt-5" href="logout.php" style="width:100%;">Logout</a>
     </div>
     <?php
 }
+require('partials/footer.php');
 ?>
