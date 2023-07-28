@@ -1,0 +1,43 @@
+1) unzip the file
+2) open local phpmyadmin webpage
+3) click on SQL on the top of the page
+4) paste this in:
+CREATE DATABASE Scandance;
+
+CREATE TABLE userorganizer (
+    Organizer_ID INT AUTO_INCREMENT, 
+    Organizer_Email VARCHAR(50) NOT NULL, 
+    Organizer_Password CHAR(60) NOT NULL, 
+    PRIMARY KEY (Organizer_ID)
+);
+
+CREATE TABLE userparticipant (
+    Participant_ID INT AUTO_INCREMENT, 
+    Participant_Email VARCHAR(50) NOT NULL, 
+    Participant_Password CHAR(60) NOT NULL, 
+    Participant_Name VARCHAR(50),
+    Participant_Phone VARCHAR(20),
+    PRIMARY KEY (Participant_ID)
+);
+
+CREATE TABLE events (
+    Event_ID INT AUTO_INCREMENT, 
+    Organizer_ID INT NOT NULL, 
+    Event_Name VARCHAR(20) NOT NULL, 
+    Event_Start DATETIME NOT NULL,
+    Event_End DATETIME NOT NULL,
+    Event_Code VARCHAR(6) NOT NULL,
+    PRIMARY KEY (Event_ID),
+    FOREIGN KEY (Organizer_ID) REFERENCES userorganizer(Organizer_ID)
+);
+
+CREATE TABLE eventparticipants (
+    Event_ID INT NOT NULL, 
+    Event_participants JSON,
+    FOREIGN KEY (Event_ID) REFERENCES events(Event_ID)
+);
+
+5) inside the unzipped folder, open .env
+6) change the DB information if needed, and change the "QR_DOMAIN" to the path of the page. (important for when scanning without being on the website, to redirect to the site)
+7) open the webpage with https://localhost/s4webdevgroup (after extracting the folder into htdocs)
+8) make sure it is HTTPS in the URL, else the camera scanning feature will not work
